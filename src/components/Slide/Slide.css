@@ -1,9 +1,57 @@
-.slide__background_img_container {
-  max-width: 768px;
+.slide {
+  transition:
+    opacity 0.3s,
+    transform 0.3s;
+}
+.slide-enter {
+  opacity: 1;
+  transform: translateX(0);
+}
 
+.slide-exit {
+  opacity: 0;
+  transform: translateX(-50px);
+}
+
+.slide__background_img_container {
+  position: relative;
+  max-width: 768px;
   height: auto;
 }
 
 .slide__background_img {
   width: 100%;
+  height: auto;
+  object-fit: contain;
+}
+
+.slide__background_previous {
+  width: 20px;
+}
+
+.slide__background_next {
+  position: absolute;
+  top: 50%;
+  right: 20px;
+  width: 20px;
+  object-fit: contain;
+  border: none;
+  background: transparent;
+}
+
+.slide__background_previous {
+  position: absolute;
+  top: 50%;
+  left: 20px;
+  border: none;
+  background: transparent;
+}
+
+.slide__background_next_img {
+  width: 30px;
+  cursor: pointer;
+}
+
+.slide__background_next_img_type_next {
+  transform: rotate(180deg);
 }

@@ -1,13 +1,13 @@
 .header__nav_bar {
   display: flex;
   justify-content: space-between;
-  padding: 30px;
+  padding: 10px 10px 10px 10px;
   align-items: center;
   position: relative;
 }
 
 .header__nav_bar_title {
-  font-size: 20px;
+  font-size: 15px;
 }
 
 .header__nav_bar_thumbnail {

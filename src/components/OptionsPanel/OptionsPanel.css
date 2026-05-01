@@ -1,5 +1,13 @@
-.container {
-  padding: 20px;
+.options-panel {
+  transition: opacity 0.3s;
+}
+
+.options-panel__open {
+  opacity: 1;
+}
+
+.options_pan__closed {
+  opacity: 0;
 }
 
 .optionsPanel__title {
