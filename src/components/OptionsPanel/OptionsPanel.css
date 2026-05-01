@@ -1,0 +1,50 @@
+.container {
+  padding: 20px;
+}
+
+.optionsPanel__title {
+  color: red;
+}
+
+.container {
+  position: absolute;
+  inset: 0;
+  z-index: 1000;
+  background: rgb(246, 246, 246);
+  width: 100%;
+}
+
+.container__close_button {
+  position: absolute;
+  right: 20px;
+  border: none;
+}
+.container__close_button_img {
+  width: 20px;
+  height: 20px;
+}
+
+.container__links {
+  display: flex;
+  flex-direction: column;
+}
+
+.container__links_container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.container__link {
+  text-decoration: none;
+  color: black;
+  font-weight: 600;
+  font-size: 20px;
+  margin-top: 15px;
+}
+
+.container__link_forward_arrow {
+  width: 20px;
+  margin: 10px 15px 0 0;
+  margin-right: 15px;
+}

@@ -1,0 +1,9 @@
+.slide__background_img_container {
+  max-width: 768px;
+
+  height: auto;
+}
+
+.slide__background_img {
+  width: 100%;
+}
