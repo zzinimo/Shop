@@ -25,6 +25,19 @@
   object-fit: contain;
 }
 
+.slide__background_button {
+  position: absolute;
+  bottom: 20px;
+  left: 10px;
+  background: white;
+  border: 1px solid black;
+  padding: 2px;
+  border-radius: 2px;
+  border: none;
+  font-size: 10px;
+  cursor: pointer;
+}
+
 .slide__background_previous {
   width: 20px;
 }

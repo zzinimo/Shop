@@ -1,13 +1,19 @@
 .options-panel {
   transition: opacity 0.3s;
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  background: rgb(246, 246, 246);
 }
 
-.options-panel__open {
+.options_panel__open {
+  pointer-events: auto;
   opacity: 1;
 }
 
-.options_pan__closed {
+.options_panel__closed {
   opacity: 0;
+  pointer-events: none;
 }
 
 .optionsPanel__title {
@@ -15,10 +21,7 @@
 }
 
 .container {
-  position: absolute;
-  inset: 0;
-  z-index: 1000;
-  background: rgb(246, 246, 246);
+  position: relative;
   width: 100%;
 }
 

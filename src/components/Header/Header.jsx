@@ -14,12 +14,7 @@ function Header({ isPanelOpen, setIsPanelOpen }) {
 
   return (
     <>
-      {isPanelOpen && (
-        <OptionsPanel
-          isPanelOpen={isPanelOpen}
-          setIsPanelOpen={setIsPanelOpen}
-        />
-      )}
+      <OptionsPanel isPanelOpen={isPanelOpen} setIsPanelOpen={setIsPanelOpen} />
       <nav className="header__nav_bar">
         <h1 className="header__nav_bar_title">The Collection</h1>
         <button type="button" onClick={handleThumbnailClick}>

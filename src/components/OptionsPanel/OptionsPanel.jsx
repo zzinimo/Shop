@@ -5,7 +5,8 @@ import rightArrow from "../../assets/arrowRight.png";
 import closeButton from "../../assets/closeButton (2).png";
 
 function OptionsPanel({ isPanelOpen, setIsPanelOpen }) {
-  const [animationState, setAnimationState] = useState(open);
+  const [animationState, setAnimationState] = useState("open");
+
   const customeClassName = ({ isActive }) => {
     return isActive
       ? "container__link container__link_active"
@@ -18,7 +19,7 @@ function OptionsPanel({ isPanelOpen, setIsPanelOpen }) {
   return (
     <>
       <div
-        className={`options-panel ${isPanelOpen ? "options_panel__open" : "options_panel__close"}`}
+        className={`options-panel ${isPanelOpen ? "options_panel__open" : "options_panel__closed"}`}
       >
         <div className="container">
           <button className="container__close_button" type="button">
