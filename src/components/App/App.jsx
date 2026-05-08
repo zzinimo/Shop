@@ -5,6 +5,7 @@ import { useState } from "react";
 import Header from "../Header/Header";
 import Main from "../Main/Main";
 import OurStory from "../OurStory/OurStory";
+import Products from "../Products/Products";
 
 function App() {
   //handles OptionsPanel visibility. Passed to Header and OptionsPanel
@@ -14,6 +15,7 @@ function App() {
       <Header isPanelOpen={isPanelOpen} setIsPanelOpen={setIsPanelOpen} />
       <Main />
       <OurStory />
+      <Products />
     </>
   );
 }

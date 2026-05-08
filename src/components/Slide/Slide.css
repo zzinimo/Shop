@@ -36,6 +36,9 @@
   border: none;
   font-size: 10px;
   cursor: pointer;
+  width: 100px;
+  padding: 10px;
+  border-radius: 5px;
 }
 
 .slide__background_previous {

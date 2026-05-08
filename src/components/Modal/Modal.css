@@ -1,0 +1,33 @@
+.modal {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.modal__container {
+  max-width: 500px;
+  width: 90vw;
+  position: relative;
+  display: flex;
+}
+
+.modal__image {
+  max-width: 500px;
+  width: 100%;
+  height: auto;
+  max-height: 80vh;
+
+  object-fit: cover;
+}
+
+.modal__container_close_button {
+  background: transparent;
+  border: none;
+  position: absolute;
+  right: -20px;
+  top: -50px;
+}

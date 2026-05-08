@@ -40,7 +40,7 @@ function Slide() {
           alt=""
           className="slide__background_img"
         />
-        <button className="slide__background_button">shop</button>
+        <button className="slide__background_button">Shop Now</button>
       </div>
       <button
         className="slide__background_previous"
