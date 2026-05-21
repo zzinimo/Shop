@@ -3,12 +3,12 @@ import { useState } from "react";
 import { Routes, Route } from "react-router-dom";
 
 //components
-import Header from "../Header/Header";
-import Main from "../Main/Main";
-import OurStory from "../OurStory/OurStory";
-import Products from "../Products/Products";
-import SubscribeForm from "../SubscribeForm/SubscribeForm";
-import AllProducts from "../AllProducts/AllProducts";
+import Header from "../Header/Header.js";
+import Main from "../Main/Main.js";
+import OurStory from "../OurStory/OurStory.js";
+import Products from "../Products/Products.js";
+import SubscribeForm from "../SubscribeForm/SubscribeForm.js";
+import AllProducts from "../AllProducts/AllProducts.js";
 
 function App() {
   //handles OptionsPanel visibility. Passed to Header and OptionsPanel

@@ -25,7 +25,7 @@ function Modal({ selectedImage, setIsOpen }: ModalProps) {
     };
   });
 
-  const handleCloseButtonClick = (e) => {
+  const handleCloseButtonClick = () => {
     setIsOpen(false);
   };
 
@@ -49,7 +49,7 @@ function Modal({ selectedImage, setIsOpen }: ModalProps) {
         </button>
         <div className="madal__container_image">
           <img
-            src={selectedImage}
+            src={selectedImage ?? ""}
             alt="Product Photo"
             className="modal__image"
           />

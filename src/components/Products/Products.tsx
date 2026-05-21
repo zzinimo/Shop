@@ -1,12 +1,18 @@
 import "./Products.css";
 import { useState, useEffect } from "react";
-import Modal from "../Modal/Modal";
+import Modal from "../Modal/Modal.js";
 
 //function imports
-import getClothingItems from "../../../api";
+import getClothingItems from "../../api.js";
+
+type ClothingItem = {
+  src: string, 
+  price: string, 
+  description: string, 
+}
 
 function Products() {
-  const [clothingItems, setClothingItems] = useState([]);
+  const [clothingItems, setClothingItems] = useState<ClothingItem[]>([]);
   //useEffect to fetch clothing items on component render
   useEffect(() => {
     const fetchData = async () => {
@@ -17,11 +23,11 @@ function Products() {
   }, []);
 
   const [isOpen, setIsOpen] = useState(false);
-  const [selectedImage, setSelectedImage] = useState(null);
+  const [selectedImage, setSelectedImage] = useState<string | null>(null);
 
-  const handleImageClick = (e) => {
+  const handleImageClick = (e: React.MouseEvent<HTMLImageElement>) => {
     setIsOpen(true);
-    setSelectedImage(e.target.src);
+    setSelectedImage((e.target as HTMLImageElement).src);
   };
 
   return (
@@ -46,7 +52,7 @@ function Products() {
                   onClick={handleImageClick}
                 />
                 <h6 className="product__title">Clothing</h6>
-                <p className="product__price">{item.Price}</p>
+                <p className="product__price">{item.price}</p>
                 <p className="product__description">{item.description}</p>
               </li>
             );

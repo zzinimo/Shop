@@ -1,6 +1,6 @@
 import "./Header.css";
 import sideThumbnail from "../../assets/menu.png";
-import OptionsPanel from "../OptionsPanel/OptionsPanel.jsx";
+import OptionsPanel from "../OptionsPanel/OptionsPanel.js";
 
 type HeaderProps = {
   isPanelOpen: boolean, 
