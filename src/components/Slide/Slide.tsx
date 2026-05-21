@@ -1,19 +1,18 @@
 import "./Slide.css";
-import rightArrow from "../../assets/rightGalloryArrow.png";
 import leftArrow from "../../assets/leftGalloryArrow.png";
-
 import slide1 from "../../assets/MainBackgroundImage.jpeg";
 import slide2 from "../../assets/twoMen.jpeg";
 import slide3 from "../../assets/womanInJacket.jpeg";
 import { useState } from "react";
 
 function Slide() {
-  const myImages = [slide1, slide2, slide3];
+  const myImages= [slide1, slide2, slide3];
   const [currentIndex, setCurrentIndex] = useState(0);
   const [animationState, setAnimationState] = useState("slide-enter");
 
   const prevSlide = () => {
     setAnimationState("slide-exit");
+
     setTimeout(() => {
       const isFirstSlide = currentIndex === 0;
       const newIndex = isFirstSlide ? myImages.length - 1 : currentIndex - 1;

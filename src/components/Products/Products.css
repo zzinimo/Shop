@@ -16,6 +16,7 @@
 
 .product {
   width: 100%;
+  width: 200;
   list-style-type: none;
   border-radius: 5px;
   overflow: hidden;
@@ -36,12 +37,13 @@
 }
 
 .products__container_button {
-  width: 150px;
-  padding: 20px;
+  width: 100px;
+  padding: 5px;
   display: block;
   margin: 20px auto 20px;
   border-radius: 8px;
   background-color: rgb(249, 99, 44);
   color: white;
   border: none;
+  font-size: 12px;
 }

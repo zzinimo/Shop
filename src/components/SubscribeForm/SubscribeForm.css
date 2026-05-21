@@ -1,0 +1,27 @@
+.subscribe__form_heading {
+  width: 80px;
+  margin: 0 auto;
+}
+
+.subscribe__form_label {
+  font-size: 8px;
+  display: block;
+  display: flex;
+  justify-content: center;
+}
+
+.subscribe__form_input {
+  width: 80%;
+  margin: 10px auto;
+  display: block;
+  text-align: center;
+  font-size: 8px;
+  border: 1px solid rgb(249, 99, 44);
+  border-radius: 8px;
+  padding: 5px;
+}
+
+.subscribe__form_input:focus {
+  border: 2px solid rgb(244, 93, 93);
+  outline: none;
+}

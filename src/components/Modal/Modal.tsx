@@ -1,11 +1,18 @@
-import { useState, useEffect } from "react";
+import {  useEffect } from "react";
 import "./Modal.css";
 
 import closeButton from "../../assets/closeButton (2).png";
 
-function Modal({ isOpen, selectedImage, setIsOpen }) {
+type ModalProps = {
+  selectedImage: string | null, 
+  isOpen: boolean, 
+  setIsOpen: (value: boolean) => void
+
+}
+
+function Modal({ selectedImage, setIsOpen }: ModalProps) {
   useEffect(() => {
-    const handleEscapeKeyClick = (e) => {
+    const handleEscapeKeyClick = (e: KeyboardEvent) => {
       if (e.key === "Escape") {
         setIsOpen(false);
       }
@@ -22,9 +29,9 @@ function Modal({ isOpen, selectedImage, setIsOpen }) {
     setIsOpen(false);
   };
 
-  const handleModalWindowClick = (e) => {
+  const handleModalWindowClick = (e: React.MouseEvent<HTMLDivElement>) => {
     console.log(e);
-    if (e.target.className === "modal") {
+    if ((e.target as HTMLElement).className === "modal") {
       setIsOpen(false);
     }
   };

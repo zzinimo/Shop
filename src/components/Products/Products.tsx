@@ -2,19 +2,19 @@ import "./Products.css";
 import { useState, useEffect } from "react";
 import Modal from "../Modal/Modal";
 
-//photos
-import Tshirts from "../../assets/Products/TshirtsMultiColored.jpg";
-import whiteT from "../../assets/Products/whiteTModeled.jpg";
-import yellowJumpSuit from "../../assets/Products/yellowJumpsuitFull.jpg";
-import blackSuitFull from "../../assets/Products/blackSuitFull.jpg";
+//function imports
+import getClothingItems from "../../../api";
 
 function Products() {
-  const [clothingItems, setClothingItems] = useState([
-    Tshirts,
-    whiteT,
-    yellowJumpSuit,
-    blackSuitFull,
-  ]);
+  const [clothingItems, setClothingItems] = useState([]);
+  //useEffect to fetch clothing items on component render
+  useEffect(() => {
+    const fetchData = async () => {
+      const items = await getClothingItems();
+      setClothingItems(items.items);
+    };
+    fetchData();
+  }, []);
 
   const [isOpen, setIsOpen] = useState(false);
   const [selectedImage, setSelectedImage] = useState(null);
@@ -23,6 +23,7 @@ function Products() {
     setIsOpen(true);
     setSelectedImage(e.target.src);
   };
+
   return (
     <>
       {isOpen && (
@@ -37,17 +38,16 @@ function Products() {
         <ul className="products">
           {clothingItems.map((item, index) => {
             return (
-              <li key={index} className="product" onClick={handleImageClick}>
+              <li key={index} className="product">
                 <img
-                  src={item}
+                  src={`http://localhost:3000${item.src}`}
                   alt="Product Photo"
                   className="product__photo"
+                  onClick={handleImageClick}
                 />
                 <h6 className="product__title">Clothing</h6>
-                <p className="product__price">$18</p>
-                <p className="product__description">
-                  Warm jumpsut great for any weather. very comfy!
-                </p>
+                <p className="product__price">{item.Price}</p>
+                <p className="product__description">{item.description}</p>
               </li>
             );
           })}

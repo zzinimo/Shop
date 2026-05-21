@@ -1,12 +1,14 @@
 import "./Header.css";
-import sideThumbnail from "../../assets/thumbNailSide.png";
-import OptionsPanel from "../OptionsPanel/OptionsPanel";
+import sideThumbnail from "../../assets/menu.png";
+import OptionsPanel from "../OptionsPanel/OptionsPanel.jsx";
 
-import { NavLink } from "react-router-dom";
-import { useState } from "react";
+type HeaderProps = {
+  isPanelOpen: boolean, 
+  setIsPanelOpen: (value:boolean) => void; 
+}
 
-function Header({ isPanelOpen, setIsPanelOpen }) {
-  const handleThumbnailClick = (e) => {
+function Header({ isPanelOpen, setIsPanelOpen }: HeaderProps) {
+  const handleThumbnailClick = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     setIsPanelOpen(true);
     console.log("function ran");
@@ -17,7 +19,11 @@ function Header({ isPanelOpen, setIsPanelOpen }) {
       <OptionsPanel isPanelOpen={isPanelOpen} setIsPanelOpen={setIsPanelOpen} />
       <nav className="header__nav_bar">
         <h1 className="header__nav_bar_title">The Collection</h1>
-        <button type="button" onClick={handleThumbnailClick}>
+        <button
+          className="header__nav_bar_button"
+          type="button"
+          onClick={handleThumbnailClick}
+        >
           <img
             src={sideThumbnail}
             alt="Options Thumbnail"

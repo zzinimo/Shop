@@ -1,13 +1,16 @@
 import { NavLink } from "react-router-dom";
-import { useState } from "react";
 import "./OptionsPanel.css";
 import rightArrow from "../../assets/arrowRight.png";
 import closeButton from "../../assets/closeButton (2).png";
 
-function OptionsPanel({ isPanelOpen, setIsPanelOpen }) {
-  const [animationState, setAnimationState] = useState("open");
+type OptionsPanelProps = {
+  isPanelOpen: boolean, 
+  setIsPanelOpen: (value:boolean) => void; 
+}
 
-  const customeClassName = ({ isActive }) => {
+function OptionsPanel({ isPanelOpen, setIsPanelOpen }: OptionsPanelProps) {
+
+  const customeClassName = ({ isActive }: {isActive: boolean}) => {
     return isActive
       ? "container__link container__link_active"
       : "container__link";
