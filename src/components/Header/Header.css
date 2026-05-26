@@ -10,9 +10,30 @@
   font-size: 15px;
 }
 
+.header__cart_button {
+  border: none;
+  width: 40px;
+  position: relative;
+}
+
+.header__cart_button_counter {
+  position: absolute;
+  top: -8px;
+  right: 15px;
+  width: 3px;
+  height: 5px;
+  color: red;
+  font-size: 10px;
+}
+
+.header__cart_button_img {
+  width: 15px;
+  height: 15px;
+}
+
 .header__nav_bar_button {
   border: none;
-  width: 30px;
+  width: 20px;
 }
 .header__nav_bar_thumbnail {
   width: 10px;

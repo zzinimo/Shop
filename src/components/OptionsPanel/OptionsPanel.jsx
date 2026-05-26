@@ -3,14 +3,12 @@ import "./OptionsPanel.css";
 import rightArrow from "../../assets/arrowRight.png";
 import closeButton from "../../assets/closeButton (2).png";
 
-type OptionsPanelProps = {
-  isPanelOpen: boolean, 
-  setIsPanelOpen: (value:boolean) => void; 
-}
+function OptionsPanel({ isPanelOpen, setIsPanelOpen }) {
+  const handleOptionClick = () => {
+    setIsPanelOpen(false);
+  };
 
-function OptionsPanel({ isPanelOpen, setIsPanelOpen }: OptionsPanelProps) {
-
-  const customeClassName = ({ isActive }: {isActive: boolean}) => {
+  const customeClassName = ({ isActive }) => {
     return isActive
       ? "container__link container__link_active"
       : "container__link";
@@ -36,7 +34,11 @@ function OptionsPanel({ isPanelOpen, setIsPanelOpen }: OptionsPanelProps) {
           <h2 className="optionsPanel__title">The Collection</h2>
           <div className="container__links">
             <div className="container__links_container">
-              <NavLink to="/" className={customeClassName}>
+              <NavLink
+                to="/"
+                className={customeClassName}
+                onClick={handleOptionClick}
+              >
                 Home
               </NavLink>
               <img
@@ -46,7 +48,11 @@ function OptionsPanel({ isPanelOpen, setIsPanelOpen }: OptionsPanelProps) {
               />
             </div>
             <div className="container__links_container">
-              <NavLink to="/prducts" className={customeClassName}>
+              <NavLink
+                to="/all-products"
+                className={customeClassName}
+                onClick={handleOptionClick}
+              >
                 Products
               </NavLink>
               <img
@@ -56,7 +62,11 @@ function OptionsPanel({ isPanelOpen, setIsPanelOpen }: OptionsPanelProps) {
               />
             </div>
             <div className="container__links_container">
-              <NavLink to="/cart" className={customeClassName}>
+              <NavLink
+                to="/cart"
+                className={customeClassName}
+                onClick={handleOptionClick}
+              >
                 Cart
               </NavLink>
               <img

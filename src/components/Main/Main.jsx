@@ -1,5 +1,5 @@
 import "./Main.css";
-import Slide from "../Slide/Slide";
+import Slide from "../Slide/Slide.jsx";
 
 function Main() {
   return (

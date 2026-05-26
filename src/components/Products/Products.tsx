@@ -1,28 +1,29 @@
 import "./Products.css";
-import { useState, useEffect } from "react";
-import Modal from "../Modal/Modal.js";
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import Modal from "../Modal/Modal.jsx";
+
+import AddToCartButton from "../AddToCartButton/AddToCartButton.js";
+
 
 //function imports
-import getClothingItems from "../../api.js";
+import { useClothingItems } from "../../useClothingItems.js";
 
-type ClothingItem = {
+export type ClothingItem = {
+  _id: string, 
   src: string, 
   price: string, 
   description: string, 
 }
 
 function Products() {
-  const [clothingItems, setClothingItems] = useState<ClothingItem[]>([]);
+  const clothingItems = useClothingItems();
+  const navigate = useNavigate(); 
   //useEffect to fetch clothing items on component render
-  useEffect(() => {
-    const fetchData = async () => {
-      const items = await getClothingItems();
-      setClothingItems(items.items);
-    };
-    fetchData();
-  }, []);
+  
 
   const [isOpen, setIsOpen] = useState(false);
+  
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
 
   const handleImageClick = (e: React.MouseEvent<HTMLImageElement>) => {
@@ -30,6 +31,10 @@ function Products() {
     setSelectedImage((e.target as HTMLImageElement).src);
   };
 
+
+    const handleViewProductButtonClick = () => {
+      navigate('/all-products'); 
+    }
   return (
     <>
       {isOpen && (
@@ -42,9 +47,10 @@ function Products() {
       <h2 className="products__title">Products</h2>
       <div className="products__container">
         <ul className="products">
-          {clothingItems.map((item, index) => {
+          {clothingItems.map((item: ClothingItem) => {
             return (
-              <li key={index} className="product">
+              <li key={item._id} className="product">
+                <AddToCartButton product={{ ...item, _id: item._id, quantity: 1 }} /> 
                 <img
                   src={`http://localhost:3000${item.src}`}
                   alt="Product Photo"
@@ -59,7 +65,10 @@ function Products() {
           })}
         </ul>
       </div>
-      <button type="button" className="products__container_button">
+      <button 
+      type="button" 
+      className="products__container_button"
+      onClick={handleViewProductButtonClick}>
         View all products
       </button>
     </>
