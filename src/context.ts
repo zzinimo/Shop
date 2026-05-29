@@ -8,6 +8,8 @@ export type CartItem = {
 export type CartContextType = {
 	cart: CartItem[], 
 	setCart: (cart: CartItem[]) => void
+	isCartOpen: boolean, 
+	setIsCartOpen: (value: any) => void; 
 }
 
 export const cartContext = createContext<CartContextType | null>(null); 

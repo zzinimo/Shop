@@ -20,10 +20,17 @@ function App() {
   const [shoppingCart, setShoppingCart] = useState([]);
 
   const [isPanelOpen, setIsPanelOpen] = useState(false);
+  const [isCartOpen, setIsCartOpen] = useState(false);
+
   return (
     <>
       <cartContext.Provider
-        value={{ cart: shoppingCart, setCart: setShoppingCart }}
+        value={{
+          cart: shoppingCart,
+          setCart: setShoppingCart,
+          isCartOpen,
+          setIsCartOpen,
+        }}
       >
         <Routes>
           <Route

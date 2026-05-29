@@ -6,11 +6,7 @@ import type { ClothingItem } from "../Products/Products.js";
 function AllProducts() {
   const publicUrl = 'http://localhost:3000'
   const clothingItems: ClothingItem[] = useClothingItems(); 
-  console.log('items', clothingItems); 
-  console.log(publicUrl); 
- console.log('publicurl', publicUrl); 
 
- console.log('hello')
   return (
     <>
     <div className="all__products_header">

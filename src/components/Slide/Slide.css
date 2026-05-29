@@ -17,6 +17,7 @@
   position: relative;
   max-width: 768px;
   height: auto;
+  overflow: hidden;
 }
 
 .slide__background_img {

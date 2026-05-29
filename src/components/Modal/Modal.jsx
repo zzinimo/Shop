@@ -23,7 +23,6 @@ function Modal({ selectedImage, setIsOpen, isOpen }) {
   };
 
   const handleModalWindowClick = (e) => {
-    console.log(e);
     if (e.target.className === "modal") {
       setIsOpen(false);
     }

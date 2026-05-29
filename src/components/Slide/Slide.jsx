@@ -3,10 +3,19 @@ import leftArrow from "../../assets/leftGalloryArrow.png";
 import slide1 from "../../assets/MainBackgroundImage.jpeg";
 import slide2 from "../../assets/twoMen.jpeg";
 import slide3 from "../../assets/womanInJacket.jpeg";
-import { useState } from "react";
+import Cart from "../Cart/Cart.jsx";
+import { useState, useContext } from "react";
+import { cartContext } from "../../context.js";
 
 function Slide() {
-  const myImages= [slide1, slide2, slide3];
+  const context = useContext(cartContext);
+
+  if (!context) {
+    return null;
+  }
+  const { cart, isCartOpen, setIsCartOpen } = context;
+
+  const myImages = [slide1, slide2, slide3];
   const [currentIndex, setCurrentIndex] = useState(0);
   const [animationState, setAnimationState] = useState("slide-enter");
 
@@ -33,6 +42,7 @@ function Slide() {
 
   return (
     <div className="slide__background_img_container">
+      <Cart className={isCartOpen ? "open" : ""} />
       <div className={`slide ${animationState}`}>
         <img
           src={myImages[currentIndex]}
