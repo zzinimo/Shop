@@ -60,6 +60,22 @@ function App() {
               </>
             }
           />
+
+          <Route
+            path="/cart"
+            element={
+              <>
+                <Header
+                  isPanelOpen={isPanelOpen}
+                  setIsPanelOpen={setIsPanelOpen}
+                />
+                <Main />
+                <OurStory />
+                <Products />
+                <SubscribeForm />
+              </>
+            }
+          />
         </Routes>
       </cartContext.Provider>
     </>

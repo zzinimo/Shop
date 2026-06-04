@@ -23,12 +23,12 @@ function Header({ isPanelOpen, setIsPanelOpen }: HeaderProps) {
 
   const handleThumbnailClick = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
+    setIsCartOpen(false)
     setIsPanelOpen(true);
   };
 
    const handleCartClick = () => {
     setIsCartOpen((pValue: any) => !pValue);
-    console.log("is cart open?", isCartOpen);
   };
 
 

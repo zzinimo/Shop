@@ -61,20 +61,6 @@ function OptionsPanel({ isPanelOpen, setIsPanelOpen }) {
                 alt="Forward Arrow"
               />
             </div>
-            <div className="container__links_container">
-              <NavLink
-                to="/cart"
-                className={customeClassName}
-                onClick={handleOptionClick}
-              >
-                Cart
-              </NavLink>
-              <img
-                className="container__link_forward_arrow"
-                src={rightArrow}
-                alt="Forward Arrow"
-              />
-            </div>
           </div>
         </div>
       </div>
