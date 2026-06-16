@@ -1,6 +1,7 @@
 import "./AllProducts.css";
 import { useClothingItems } from "../../useClothingItems.js";
 import type { ClothingItem } from "../Products/Products.js";
+import AddToCartButton from "../AddToCartButton/AddToCartButton.js";
 
 
 function AllProducts() {
@@ -17,6 +18,7 @@ function AllProducts() {
           {clothingItems.map((item: ClothingItem) => {
             return(
               <li key={item._id} className="all__products_product">
+                <AddToCartButton product={{...item, _id: item._id, quantity: 1}} />
                 <img src={`${publicUrl}${item.src}`} alt="" className="all__products_product-photo" />
                 <h6 className="all__products_product_title">Clothing</h6>
                 <p className="all__products_product_price">{item.price}</p>

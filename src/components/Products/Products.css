@@ -23,6 +23,10 @@
   overflow: hidden;
 }
 
+.product .add__button {
+  bottom: 10px;
+}
+
 .product__photo {
   width: 100%;
   object-fit: cover;
