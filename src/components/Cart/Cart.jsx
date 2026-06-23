@@ -2,9 +2,10 @@ import "./Cart.css";
 import { useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import { cartContext } from "../../context.js";
+import deleteButton from "../../assets/delete.png";
 
 function Cart({ className = "" }) {
-  const { cart, setIsCartOpen } = useContext(cartContext);
+  const { cart, setIsCartOpen, setCart } = useContext(cartContext);
   const navigate = useNavigate();
 
   const subtotal = cart.reduce((total, cartItem) => {
@@ -25,6 +26,20 @@ function Cart({ className = "" }) {
     navigate("/all-products");
     setIsCartOpen(false);
   };
+
+  const handleDeleteProductsClick = (id) => {
+    setCart(
+      cart.filter((cartItem) => {
+        return cartItem._id !== id;
+      }),
+    );
+  };
+
+  const handleCheckoutClick = () => {
+    navigate("/checkout");
+    setIsCartOpen(false);
+  };
+
   return (
     <div className={`cart__container ${className}`}>
       <h1 className="cart__container_title">Your Cart</h1>
@@ -47,12 +62,30 @@ function Cart({ className = "" }) {
                     <p className="cart__container_list_item_price">
                       {cartItem.price} x {cartItem.quantity ?? 1}
                     </p>
+                    <button
+                      type="button"
+                      className="cart__container_delete_button"
+                      onClick={() => handleDeleteProductsClick(cartItem._id)}
+                    >
+                      <img
+                        src={deleteButton}
+                        alt="Delete Button"
+                        className="cart__container_delete_button_img"
+                      />
+                    </button>
                   </li>
                 </div>
               );
             })}
           </ul>
           <p className="cart__container_total">Total: ${subtotal.toFixed(2)}</p>
+          <button
+            onClick={handleCheckoutClick}
+            type="button"
+            className="cart__container_checkout_button"
+          >
+            Checkout
+          </button>
         </>
       ) : (
         <>

@@ -42,7 +42,7 @@
   align-items: center;
   flex-direction: row;
   width: 100%;
-  padding: 0 10px;
+  padding: 0 5px;
 }
 
 .cart__container_list_item_img {
@@ -52,6 +52,16 @@
 
 .cart__container_total {
   margin: 10px;
+}
+
+.cart__container_checkout_button {
+  display: block;
+  width: 80%;
+  margin: 0 auto 10px;
+  height: 30px;
+  border-radius: 5px;
+  border: none;
+  background: rgb(249, 99, 44);
 }
 
 .cart__empty_container {
@@ -77,4 +87,8 @@
   background-color: rgb(249, 99, 44);
   color: white;
   font-weight: 700;
+}
+
+.cart__container_delete_button {
+  border: none;
 }

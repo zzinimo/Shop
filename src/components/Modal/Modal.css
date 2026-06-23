@@ -41,3 +41,11 @@
   width: 20px;
   height: 20px;
 }
+
+.modal__container_text {
+  padding: 10px 20px;
+}
+
+.modal__description {
+  color: white;
+}

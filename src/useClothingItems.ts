@@ -8,8 +8,15 @@ export function useClothingItems(){
 
 	useEffect(()=> {
 		const fetchData = async() => {
-			const items = await getClothingItems(); 
-			setClothingItems(items.items)
+			try{
+				const items = await getClothingItems(); 
+				if(items){
+					setClothingItems(items.items)
+				}
+			} catch(error){
+				console.error("Failed to fetch clothing items:", error)
+			}
+			
 		}
 		fetchData(); 
 	}, []); 

@@ -25,10 +25,14 @@ function Products() {
   const [isOpen, setIsOpen] = useState(false);
   
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
+  const [selectedDescription, setSelectedDescription] = useState<string | null>(null);
+  const [selectedPrice, setSelectedPrice] = useState<string | null>(null);
 
-  const handleImageClick = (e: React.MouseEvent<HTMLImageElement>) => {
+  const handleImageClick = (item: ClothingItem) => {
     setIsOpen(true);
-    setSelectedImage((e.target as HTMLImageElement).src);
+    setSelectedImage(`http://localhost:3000${item.src}`);
+    setSelectedDescription(item.description);
+    setSelectedPrice(item.price); 
   };
 
 
@@ -41,6 +45,8 @@ function Products() {
         <Modal
           isOpen={isOpen}
           selectedImage={selectedImage}
+          selectedDescription={selectedDescription}
+          selectedPrice={selectedPrice}
           setIsOpen={setIsOpen}
         />
       )}
@@ -55,7 +61,7 @@ function Products() {
                   src={`http://localhost:3000${item.src}`}
                   alt="Product Photo"
                   className="product__photo"
-                  onClick={handleImageClick}
+                  onClick={() => handleImageClick(item)}
                 />
                 <h6 className="product__title">Clothing</h6>
                 <p className="product__price">{item.price}</p>

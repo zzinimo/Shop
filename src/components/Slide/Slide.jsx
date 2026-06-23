@@ -40,22 +40,8 @@ function Slide() {
     }, 300);
   };
 
-  const handleOutsideCartClick = (e) => {
-    console.log("target", e.target);
-    if (e.target === e.currentTarget) {
-      setIsCartOpen(false);
-    }
-  };
-
   return (
     <div className="slide__background_img_container">
-      {isCartOpen && (
-        <div className="cart__overlay" onClick={handleOutsideCartClick}>
-          <div className="cart__panel" onClick={(e) => e.stopPropagation()}>
-            <Cart className={isCartOpen ? "open" : ""} />
-          </div>
-        </div>
-      )}
       <div className={`slide ${animationState}`}>
         <img
           src={myImages[currentIndex]}

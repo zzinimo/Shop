@@ -13,6 +13,7 @@ import Products from "../Products/Products.jsx";
 import SubscribeForm from "../SubscribeForm/SubscribeForm.jsx";
 import AllProducts from "../AllProducts/AllProducts.js";
 import Cart from "../Cart/Cart.jsx";
+import Checkout from "../Checkout/Checkout.jsx";
 
 //context
 import { cartContext } from "../../context.js";
@@ -80,17 +81,14 @@ function App() {
           />
 
           <Route
-            path="/cart"
+            path="/checkout"
             element={
               <>
                 <Header
                   isPanelOpen={isPanelOpen}
                   setIsPanelOpen={setIsPanelOpen}
                 />
-                <Main />
-                <OurStory />
-                <Products />
-                <SubscribeForm />
+                <Checkout />
               </>
             }
           />

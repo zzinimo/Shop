@@ -3,7 +3,13 @@ import "./Modal.css";
 
 import closeButton from "../../assets/closeButton (2).png";
 
-function Modal({ selectedImage, setIsOpen, isOpen }) {
+function Modal({
+  selectedImage,
+  selectedDescription,
+  selectedPrice,
+  setIsOpen,
+  isOpen,
+}) {
   useEffect(() => {
     const handleEscapeKeyClick = (e) => {
       if (e.key === "Escape") {
@@ -45,6 +51,10 @@ function Modal({ selectedImage, setIsOpen, isOpen }) {
             alt="Product Photo"
             className="modal__image"
           />
+          <div className="modal__container_text">
+            <p className="modal__description">{selectedDescription ?? ""}</p>
+            <p className="modal__description">{selectedPrice ?? ""}</p>
+          </div>
         </div>
       </div>
     </div>
