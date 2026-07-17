@@ -2,7 +2,8 @@ const express = require("express");
 const app = express();
 const mongoose = require("mongoose");
 const cors = require("cors");
-const router = require("./routes/clothingItemRouter");
+const clothingRouter = require("./routes/clothingItemRouter");
+const ordersRouter = require("./routes/ordersRouter");
 
 const { PORT = 3000 } = process.env;
 
@@ -18,7 +19,9 @@ async function connectDB() {
 connectDB();
 app.use(express.static("public"));
 app.use(cors());
-app.use("/clothing-items", router);
+app.use(express.json());
+app.use("/clothing-items", clothingRouter);
+app.use("/orders", ordersRouter);
 
 app.listen(PORT, () => {
   console.log(`App listening to port ${PORT}`);

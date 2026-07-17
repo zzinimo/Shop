@@ -4,8 +4,17 @@ const validator = require("validator");
 const orderSchema = new mongoose.Schema(
   {
     customer: {
-      firstName: { type: String, required: true, trim: true },
-      lastName: { type: String, required: true, trim: true },
+      firstName: {
+        type: String,
+        required: true,
+        trim: true,
+      },
+
+      lastName: {
+        type: String,
+        required: true,
+        trim: true,
+      },
 
       email: {
         type: String,
@@ -22,7 +31,11 @@ const orderSchema = new mongoose.Schema(
     },
 
     shippingAddress: {
-      address: { type: String, required: true, trim: true },
+      address: {
+        type: String,
+        required: true,
+        trim: true,
+      },
     },
 
     items: [
@@ -66,7 +79,7 @@ const orderSchema = new mongoose.Schema(
         type: Number,
         required: true,
         min: 0,
-        defailt: 0,
+        default: 0,
       },
       total: {
         type: Number,
@@ -76,8 +89,8 @@ const orderSchema = new mongoose.Schema(
     },
     status: {
       type: String,
-      enum: ["pending", "pain", "shipped", "delivered", "cancelled"],
-      defailt: "pending",
+      enum: ["pending", "paid", "shipped", "delivered", "cancelled"],
+      default: "pending",
     },
   },
   { timestamps: true },
