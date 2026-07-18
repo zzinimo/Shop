@@ -1,5 +1,5 @@
 import "./Header.css";
-import { useContext, useEffect } from "react";
+import { useContext } from "react";
 import { cartContext } from "../../context.js";
 import sideThumbnail from "../../assets/menu.png";
 import OptionsPanel from "../OptionsPanel/OptionsPanel.jsx";
@@ -19,7 +19,7 @@ function Header({ isPanelOpen, setIsPanelOpen }: HeaderProps) {
   if(!context){
     return null;
   }
-  const {cart, isCartOpen, setIsCartOpen} = context;  
+  const {cart, setIsCartOpen} = context;  
 
   const handleThumbnailClick = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();

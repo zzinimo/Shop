@@ -4,7 +4,12 @@ module.exports.createOrder = async (req, res, next) => {
   try {
     const { customer, shippingAddress, items } = req.body;
 
-    if (!customer || !shippingAddress || !items) {
+    if (
+      !customer ||
+      !shippingAddress ||
+      !Array.isArray(items) ||
+      items.length === 0
+    ) {
       return res.status(400).json({
         message:
           "customer, shippingAddress, and at least one item are required",
@@ -12,8 +17,17 @@ module.exports.createOrder = async (req, res, next) => {
     }
 
     const subtotal = items.reduce((sum, item) => {
-      const qty = Number(item.quantity) || 0;
-      const price = Number(item.price) || 0;
+      const qty = Number(item.quantity);
+      const price = Number(item.price);
+
+      if (
+        !Number.isFinite(qty) ||
+        qty <= 0 ||
+        !Number.isFinite(price) ||
+        price <= 0
+      ) {
+        throw new Error("INVALID_ITEM");
+      }
       return sum + qty * price;
     }, 0);
 
@@ -37,6 +51,13 @@ module.exports.createOrder = async (req, res, next) => {
       order: newOrder,
     });
   } catch (err) {
+    if (err.message === "INVALID_ITEM") {
+      return res.status(400).json({
+        message:
+          "quantity must be greater than 0 and price must be greater than 0",
+      });
+    }
+
     if (err.name === "ValidationError") {
       return res.status(400).json({
         message: "Invalid order data",
