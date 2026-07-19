@@ -1,3 +1,4 @@
+const mongoose = require("mongoose");
 const Order = require("../models/orders");
 
 module.exports.createOrder = async (req, res, next) => {
@@ -67,5 +68,52 @@ module.exports.createOrder = async (req, res, next) => {
 
     console.error("Error creating order:", err);
     return res.status(500).json({ message: "Error creating order" });
+  }
+};
+
+module.exports.getOrderById = async (req, res) => {
+  try {
+    const orderId = req.params.id;
+
+    if (!mongoose.isValidObjectId(orderId)) {
+      return res.status(400).json({ message: "Invalid ID format provided" });
+    }
+
+    const order = await Order.findById(orderId);
+
+    if (!order) {
+      return res.status(404).json({ message: "Order not found" });
+    }
+
+    return res.status(200).json({ order: order });
+  } catch (err) {
+    console.error("Error from getOrder: ", err);
+    return res.status(500).json({ message: err.message });
+  }
+};
+
+module.exports.getOrder = async (req, res) => {
+  try {
+    const allowedStatusNames = [
+      "pending",
+      "paid",
+      "shipped",
+      "delivered",
+      "cancelled",
+    ];
+    const status = req.query.status;
+    if (!status) {
+      const orders = await Order.find({});
+      return res.status(200).json({ orders: orders });
+    }
+
+    if (!allowedStatusNames.includes(status)) {
+      return res.status(400).json({ message: "Invalid status query " });
+    }
+    const filteredOrders = await Order.find({ status: status });
+
+    return res.status(200).json({ orders: filteredOrders });
+  } catch (err) {
+    return res.status(500).json({ message: err.message });
   }
 };
