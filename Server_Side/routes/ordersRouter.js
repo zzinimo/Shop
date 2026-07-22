@@ -13,6 +13,10 @@ router.get("/:id", getOrderById);
 router.post("/", createOrder);
 router.patch("/:id/status", updateStatus);
 router.patch("/:id/cancel", cancelOrder);
+<<<<<<< Updated upstream
 router.delete("/:id/delete", deleteOrder);
+=======
+router.delete("/:id", deleteOrder);
+>>>>>>> Stashed changes
 
 module.exports = router;

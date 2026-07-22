@@ -14,15 +14,24 @@ module.exports.createOrder = async (req, res, next) => {
   try {
     const { customer, shippingAddress, items } = req.body;
 
+<<<<<<< Updated upstream
     if (
       !customer ||
       !shippingAddress ||
       !Array.isArray(items) ||
       items.length === 0
     ) {
+=======
+    if (!customer || !shippingAddress) {
+>>>>>>> Stashed changes
       return res.status(400).json({
-        message:
-          "customer, shippingAddress, and at least one item are required",
+        message: "customer and shippingAddress are required",
+      });
+    }
+
+    if (!Array.isArray(items) || items.length === 0) {
+      return res.status(400).json({
+        message: "at least one item is required",
       });
     }
 
@@ -80,6 +89,7 @@ module.exports.createOrder = async (req, res, next) => {
   }
 };
 
+<<<<<<< Updated upstream
 //Read
 module.exports.getOrderById = async (req, res) => {
   try {
@@ -90,11 +100,28 @@ module.exports.getOrderById = async (req, res) => {
     }
 
     const order = await Order.findById(orderId);
+=======
+module.exports.getOrder = async (req, res, next) => {
+  try {
+    const orders = await Order.find({}).sort({ createdAt: -1 });
+    return res.status(200).json({ orders });
+  } catch (err) {
+    console.error("Error getting orders:", err);
+    return res.status(500).json({ message: "Error getting orders" });
+  }
+};
+
+module.exports.getOrderById = async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    const order = await Order.findById(id);
+>>>>>>> Stashed changes
 
     if (!order) {
       return res.status(404).json({ message: "Order not found" });
     }
 
+<<<<<<< Updated upstream
     return res.status(200).json({ order: order });
   } catch (err) {
     console.error("Error from getOrder: ", err);
@@ -150,12 +177,42 @@ module.exports.updateStatus = async (req, res) => {
         },
       },
       { new: true, runValidators: true },
+=======
+    return res.status(200).json({ order });
+  } catch (err) {
+    if (err.name === "CastError") {
+      return res.status(400).json({ message: "Invalid order id" });
+    }
+
+    console.error("Error getting order by id:", err);
+    return res.status(500).json({ message: "Error getting order" });
+  }
+};
+
+module.exports.updateStatus = async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    const { status } = req.body;
+
+    if (!status) {
+      return res.status(400).json({ message: "status is required" });
+    }
+
+    const updatedOrder = await Order.findByIdAndUpdate(
+      id,
+      { status },
+      {
+        new: true,
+        runValidators: true,
+      },
+>>>>>>> Stashed changes
     );
 
     if (!updatedOrder) {
       return res.status(404).json({ message: "Order not found" });
     }
 
+<<<<<<< Updated upstream
     return res.status(200).json({ order: updatedOrder });
   } catch (err) {
     return res.status(500).json({ message: err.message });
@@ -212,5 +269,75 @@ module.exports.deleteOrder = async (req, res) => {
     res.json({ message: "Successfully deleted", deletedOrder: deletedOrder });
   } catch (err) {
     res.status(500).json({ message: err.message });
+=======
+    return res.status(200).json({
+      message: "Order status updated",
+      order: updatedOrder,
+    });
+  } catch (err) {
+    if (err.name === "ValidationError") {
+      return res.status(400).json({
+        message: "Invalid status",
+        errors: err.errors,
+      });
+    }
+
+    if (err.name === "CastError") {
+      return res.status(400).json({ message: "Invalid order id" });
+    }
+
+    console.error("Error updating order status:", err);
+    return res.status(500).json({ message: "Error updating order status" });
+  }
+};
+
+module.exports.cancelOrder = async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    const cancelledOrder = await Order.findByIdAndUpdate(
+      id,
+      { status: "cancelled" },
+      { new: true },
+    );
+
+    if (!cancelledOrder) {
+      return res.status(404).json({ message: "Order not found" });
+    }
+
+    return res.status(200).json({
+      message: "Order cancelled",
+      order: cancelledOrder,
+    });
+  } catch (err) {
+    if (err.name === "CastError") {
+      return res.status(400).json({ message: "Invalid order id" });
+    }
+
+    console.error("Error cancelling order:", err);
+    return res.status(500).json({ message: "Error cancelling order" });
+  }
+};
+
+module.exports.deleteOrder = async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    const deletedOrder = await Order.findByIdAndDelete(id);
+
+    if (!deletedOrder) {
+      return res.status(404).json({ message: "Order not found" });
+    }
+
+    return res.status(200).json({
+      message: "Order deleted",
+      order: deletedOrder,
+    });
+  } catch (err) {
+    if (err.name === "CastError") {
+      return res.status(400).json({ message: "Invalid order id" });
+    }
+
+    console.error("Error deleting order:", err);
+    return res.status(500).json({ message: "Error deleting order" });
+>>>>>>> Stashed changes
   }
 };
