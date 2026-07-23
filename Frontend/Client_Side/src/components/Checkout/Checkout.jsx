@@ -12,6 +12,9 @@ function Checkout() {
   const { cart } = context;
 
   const [shippingAddress, setShippingAddress] = useState(true);
+
+  //PERSONAL INFORMATION INPUT STATE
+
   const [userInput, setUserInput] = useState({
     customer: {
       firstName: "",
@@ -23,6 +26,55 @@ function Checkout() {
     },
     items: [],
   });
+
+  // PERSONAL INFORMATION INITIAL OBJECT USED TO CLEAR INPUTS
+
+  const initialPersonalInformationInput = {
+    customer: {
+      firstName: "",
+      lastName: "",
+      email: "",
+    },
+    shippingAddress: {
+      address: "",
+    },
+    items: [],
+  };
+
+  // PAYMENT FORM INPUT STATE
+
+  const [paymentInput, setPaymentInput] = useState({
+    cardName: "",
+    cardNumber: "",
+    cardExperation: "",
+    card_cvc: "",
+    billing_zip: "",
+  });
+
+  //PAYMENT INFORMATION ITITIAL OBJECT USED TO CLEAR STATE
+
+  const initialPaymentInformationInput = {
+    cardName: "",
+    cardNumber: "",
+    cardExperation: "",
+    card_cvc: "",
+    billing_zip: "",
+  };
+
+  // PAYMENT FORM ONCHANGE HANDLER
+
+  const hanglePaymentFormInputChange = (e) => {
+    const { name, value } = e.target;
+
+    setPaymentInput((prev) => {
+      return {
+        ...prev,
+        [name]: value,
+      };
+    });
+  };
+
+  // PERSONAL INFORMATION ONCHANGE HANDLER
 
   const handleInputChange = (e) => {
     const { name, value, dataset } = e.target;
@@ -37,12 +89,17 @@ function Checkout() {
     }));
   };
 
+  // PAYMENT FORM RADIO CLICK HANDLER
+
   const handleRadioClick = (value) => {
     setShippingAddress(value);
     console.log("shipping address state", value);
   };
 
+  // SUBMIT FORM HANDLER THAT CREATES ORDER AND CLEARS INPUTS
+
   const handleSubmitOrder = async () => {
+    console.log("order submitted");
     const itemsToOrder = cart.map((cartItem) => ({
       quantity: Number(cartItem.quantity ?? 1),
       price: Number(
@@ -59,6 +116,8 @@ function Checkout() {
         shippingAddress: userInput.shippingAddress,
         items: itemsToOrder,
       });
+      setUserInput(initialPersonalInformationInput);
+      setPaymentInput(initialPaymentInformationInput);
     } catch (err) {
       console.error("Error creating order:", err);
     }
@@ -67,7 +126,6 @@ function Checkout() {
   //used for console.log statement when testing handleInputChange function line 25;
   // useEffect(() => {}, [userInput]);
 
-  //may need to add more datasets
   return (
     <>
       <form id="checkout__form">
@@ -77,6 +135,7 @@ function Checkout() {
             type="text"
             id="firstName"
             name="firstName"
+            value={userInput.customer.firstName ?? ""}
             placeholder="Enter First Name"
             className="checkout__form_input"
             data-section="customer"
@@ -88,6 +147,7 @@ function Checkout() {
             type="text"
             id="lastName"
             name="lastName"
+            value={userInput.customer.lastName ?? ""}
             placeholder="Enter Last Name"
             className="checkout__form_input"
             data-section="customer"
@@ -99,6 +159,7 @@ function Checkout() {
             type="text"
             id="email"
             name="email"
+            value={userInput.customer.email ?? ""}
             placeholder="Enter Email"
             className="checkout__form_input"
             data-section="customer"
@@ -110,6 +171,7 @@ function Checkout() {
             type="text"
             id="address"
             name="address"
+            value={userInput.shippingAddress.address ?? ""}
             placeholder="Enter Address"
             className="checkout__form_input"
             data-section="shippingAddress"
@@ -157,7 +219,7 @@ function Checkout() {
           </label>
         ) : null}
       </form>
-
+      {/* ------------------------------------------------------------------------------------------------------------------------- */}
       <form id="payment__Form">
         <h1 className="payment__form_title">Payment Form</h1>
         <label htmlFor="cardName">
@@ -165,21 +227,25 @@ function Checkout() {
             type="text"
             id="cardName"
             name="cardName"
+            value={paymentInput.cardName ?? ""}
             placeholder="Name on Card"
             className="payment__form_input"
             required
+            onChange={hanglePaymentFormInputChange}
           />
         </label>
         <label htmlFor="cardNumber">
           <input
             id="cardNumber"
             name="cardNumber"
+            value={paymentInput.cardNumber ?? ""}
             type="text"
             inputMode="numeric"
             pattern="\d*"
             placeholder="Card Number"
             required
             className="payment__form_input"
+            onChange={hanglePaymentFormInputChange}
           />
         </label>
 
@@ -188,35 +254,41 @@ function Checkout() {
             type="text"
             id="cardExperation"
             name="cardExperation"
+            value={paymentInput.cardExperation ?? ""}
             placeholder="MM / YY"
             inputMode="numeric"
             maxLength={7}
             required
             className="payment__form_input"
+            onChange={hanglePaymentFormInputChange}
           />
         </label>
-        <label htmlFor="card-cvc">
+        <label htmlFor="card_cvc">
           <input
             type="text"
-            id="card-cvc"
-            name="card-cvc"
+            id="card_cvc"
+            name="card_cvc"
+            value={paymentInput.card_cvc ?? ""}
             inputMode="numeric"
             required
             maxLength={3}
             placeholder="CVC"
             className="payment__form_input payment__form_input_type_cvc"
+            onChange={hanglePaymentFormInputChange}
           />
         </label>
 
-        <label htmlFor="billing-zip">
+        <label htmlFor="billing_zip">
           <input
             type="text"
-            id="billing-zip"
-            name="billing-zip"
+            id="billing_zip"
+            name="billing_zip"
+            value={paymentInput.billing_zip ?? ""}
             required
             maxLength={5}
             placeholder="Billing Zip Code"
             className="payment__form_input"
+            onChange={hanglePaymentFormInputChange}
           />
         </label>
       </form>
