@@ -1,0 +1,25 @@
+.all__products {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(100px, 200px));
+  gap: 10px;
+  justify-content: center;
+}
+
+.all__products_product {
+  position: relative;
+  width: 100%;
+  width: 200px;
+  list-style-type: none;
+  border-radius: 5px;
+  overflow: hidden;
+}
+
+.all__products_product .add__button {
+  bottom: 60px;
+}
+
+.all__products_product-photo {
+  width: 100%;
+  object-fit: cover;
+  height: 250px;
+}

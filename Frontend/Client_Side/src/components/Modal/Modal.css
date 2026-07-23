@@ -1,0 +1,51 @@
+.modal {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.modal__container {
+  max-width: 500px;
+  width: 90vw;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.modal__image {
+  max-width: 500px;
+  width: 100%;
+  height: auto;
+  max-height: 80vh;
+  margin: 0 auto;
+  object-fit: cover;
+  display: block;
+}
+
+.modal__container_close_button {
+  background: transparent;
+  border: none;
+  position: absolute;
+  right: -5px;
+  top: -35px;
+  width: 40px;
+  height: 40px;
+}
+
+.close__button_img {
+  width: 20px;
+  height: 20px;
+}
+
+.modal__container_text {
+  padding: 10px 20px;
+}
+
+.modal__description {
+  color: white;
+}

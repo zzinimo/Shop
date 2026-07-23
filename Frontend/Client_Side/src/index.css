@@ -1,0 +1,12 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+:root {
+  --main-bg: rgb(214, 17, 17);
+}
+
+/* make a media query for min-width 600 (tablet)
+and min-width 900 px for desktop */

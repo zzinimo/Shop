@@ -1,0 +1,55 @@
+.header__nav_bar {
+  display: flex;
+  justify-content: space-between;
+  padding: 10px 10px 10px 10px;
+  align-items: center;
+  position: relative;
+}
+
+.header__nav_bar_title {
+  font-size: 15px;
+}
+
+.header__cart_button {
+  border: none;
+  width: 40px;
+  position: relative;
+}
+
+.header__cart_button_counter {
+  position: absolute;
+  top: -8px;
+  right: 15px;
+  width: 3px;
+  height: 5px;
+  color: red;
+  font-size: 10px;
+}
+
+.header__cart_button_img {
+  width: 15px;
+  height: 15px;
+}
+
+.header__nav_bar_button {
+  border: none;
+  width: 20px;
+}
+.header__nav_bar_thumbnail {
+  width: 10px;
+  height: 10px;
+}
+
+.header__links {
+  display: flex;
+  gap: 15px;
+}
+
+.header__link {
+  font-size: 30px;
+}
+
+.header__link_active {
+  font-size: 30px;
+  color: red;
+}

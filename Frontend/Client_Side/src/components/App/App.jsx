@@ -1,0 +1,101 @@
+import "./App.css";
+import { useState } from "react";
+import { Routes, Route } from "react-router-dom";
+
+//css
+import "./App.css";
+
+//components
+import Header from "../Header/Header.js";
+import Main from "../Main/Main.jsx";
+import OurStory from "../OurStory/OurStory.jsx";
+import Products from "../Products/Products.jsx";
+import SubscribeForm from "../SubscribeForm/SubscribeForm.jsx";
+import AllProducts from "../AllProducts/AllProducts.js";
+import Cart from "../Cart/Cart.jsx";
+import Checkout from "../Checkout/Checkout.jsx";
+
+//context
+import { cartContext } from "../../context.js";
+
+//Types
+
+function App() {
+  //state
+  const [shoppingCart, setShoppingCart] = useState([]);
+
+  const [isPanelOpen, setIsPanelOpen] = useState(false);
+  const [isCartOpen, setIsCartOpen] = useState(false);
+
+  const handleOutsideCartClick = (e) => {
+    console.log("target", e.target);
+    if (e.target === e.currentTarget) {
+      setIsCartOpen(false);
+    }
+  };
+
+  return (
+    <>
+      <cartContext.Provider
+        value={{
+          cart: shoppingCart,
+          setCart: setShoppingCart,
+          isCartOpen,
+          setIsCartOpen,
+        }}
+      >
+        {isCartOpen && (
+          <div className="cart__overlay" onClick={handleOutsideCartClick}>
+            <div className="cart__panel" onClick={(e) => e.stopPropagation()}>
+              <Cart className={isCartOpen ? "open" : ""} />
+            </div>
+          </div>
+        )}
+        <Routes>
+          <Route
+            path="/all-products"
+            element={
+              <>
+                <Header
+                  isPanelOpen={isPanelOpen}
+                  setIsPanelOpen={setIsPanelOpen}
+                />
+                <AllProducts />
+              </>
+            }
+          />
+          <Route
+            path="*"
+            element={
+              <>
+                <Header
+                  isPanelOpen={isPanelOpen}
+                  setIsPanelOpen={setIsPanelOpen}
+                />
+                <Main />
+                <OurStory />
+                <Products />
+                <SubscribeForm />
+              </>
+            }
+          />
+
+          <Route
+            path="/checkout"
+            element={
+              <>
+                <Header
+                  isPanelOpen={isPanelOpen}
+                  setIsPanelOpen={setIsPanelOpen}
+                />
+                <Checkout />
+              </>
+            }
+          />
+        </Routes>
+      </cartContext.Provider>
+    </>
+  );
+}
+
+export default App;
