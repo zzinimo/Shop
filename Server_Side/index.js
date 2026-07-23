@@ -4,6 +4,7 @@ const mongoose = require("mongoose");
 const cors = require("cors");
 const clothingRouter = require("./routes/clothingItemRouter");
 const ordersRouter = require("./routes/ordersRouter");
+const loginRouter = require("./routes/loginRouter");
 
 const { PORT = 3000 } = process.env;
 
@@ -21,6 +22,7 @@ app.use(express.static("public"));
 app.use(cors());
 app.use(express.json());
 app.use("/clothing-items", clothingRouter);
+app.use("/login", loginRouter);
 app.use("/orders", ordersRouter);
 
 app.listen(PORT, () => {
