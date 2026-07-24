@@ -1,12 +1,13 @@
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
+const checkToken = require("../middleware/auth.js");
 
 const User = require("../models/users");
 
 //move on process.env later
 const secretKey = "MY_SECRET_KEY";
 
-module.exports.createUser = async (req, res) => {
+module.exports.createUser = async (req, res, next) => {
   const saltRounds = 10;
 
   try {
@@ -36,11 +37,11 @@ module.exports.createUser = async (req, res) => {
       email: user.email,
     });
   } catch (err) {
-    res.status(500).json({ error: "Error creating user" });
+    return next(err);
   }
 };
 
-module.exports.login = async (req, res) => {
+module.exports.login = async (req, res, next) => {
   const { email, password } = req.body;
 
   if (!email || !password) {
@@ -75,20 +76,11 @@ module.exports.login = async (req, res) => {
     res.status(200).json({ message: "Logged in successfully" });
   } catch (err) {
     console.error(err);
-
-    if (err.name === "JsonWebToekenError") {
-      return res.status(401).json({ error: "JsonWebTokenError" });
-    }
-
-    if (err.name === "TokenExpiredError") {
-      res.status(401).json({ error: "TokenExpiredError" });
-    }
-
-    return res.status(500).json({ message: "Invalid credentials" });
+    return next(err);
   }
 };
 
-module.exports.logout = async (req, res) => {
+module.exports.logout = async (req, res, next) => {
   try {
     res.clearCookie("user", {
       httpOnly: true,
@@ -100,31 +92,24 @@ module.exports.logout = async (req, res) => {
     return res.status(200).json({ message: "Logging out" });
   } catch (err) {
     console.error(err);
-    return res.status(500).json({ error: "Logout failed" });
+    return next(err);
   }
 };
 
-module.exports.getCurrentUser = async (req, res) => {
+module.exports.getCurrentUser = async (req, res, next) => {
   try {
-    const token = req.cookies.user;
+    const currentUser = req.currentUser;
 
-    if (!token) {
-      res.status(401).json({ message: "please log in" });
-    }
-
-    const decodedToken = await jwt.verify(token, secretKey);
-    const user = await User.findById(decodedToken.id);
-
-    if (!user) {
-      res.status(401).json({ error: "Token is not valid" });
+    if (!currentUser) {
+      res.status(401).json({ error: "Current user not found" });
     }
 
     res.status(200).json({
-      id: user._id,
-      email: user.email,
-      username: user.username,
+      id: currentUser._id,
+      email: currentUser.email,
+      username: currentUser.username,
     });
   } catch (err) {
-    console.error(err);
+    return next(err);
   }
 };

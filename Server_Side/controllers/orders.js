@@ -10,7 +10,7 @@ const allowedStatusNames = [
 ];
 
 // Create
-module.exports.createOrder = async (req, res) => {
+module.exports.createOrder = async (req, res, next) => {
   try {
     const { customer, shippingAddress, items } = req.body;
 
@@ -77,12 +77,12 @@ module.exports.createOrder = async (req, res) => {
     }
 
     console.error("Error creating order:", err);
-    return res.status(500).json({ message: "Error creating order" });
+    return next(err);
   }
 };
 
 // Read
-module.exports.getOrder = async (req, res) => {
+module.exports.getOrder = async (req, res, next) => {
   try {
     const { status } = req.query;
 
@@ -98,12 +98,11 @@ module.exports.getOrder = async (req, res) => {
     const filteredOrders = await Order.find({ status }).sort({ createdAt: -1 });
     return res.status(200).json({ orders: filteredOrders });
   } catch (err) {
-    console.error("Error getting orders:", err);
-    return res.status(500).json({ message: "Error getting orders" });
+    next(err);
   }
 };
 
-module.exports.getOrderById = async (req, res) => {
+module.exports.getOrderById = async (req, res, next) => {
   try {
     const { id } = req.params;
 
@@ -118,13 +117,12 @@ module.exports.getOrderById = async (req, res) => {
 
     return res.status(200).json({ order });
   } catch (err) {
-    console.error("Error getting order by id:", err);
-    return res.status(500).json({ message: "Error getting order" });
+    return next(err);
   }
 };
 
 // Update
-module.exports.updateStatus = async (req, res) => {
+module.exports.updateStatus = async (req, res, next) => {
   try {
     const { id } = req.params;
     const { status } = req.body;
@@ -173,12 +171,11 @@ module.exports.updateStatus = async (req, res) => {
       return res.status(400).json({ message: "Invalid order id" });
     }
 
-    console.error("Error updating order status:", err);
-    return res.status(500).json({ message: "Error updating order status" });
+    return next(err);
   }
 };
 
-module.exports.cancelOrder = async (req, res) => {
+module.exports.cancelOrder = async (req, res, next) => {
   try {
     const { id } = req.params;
 
@@ -208,13 +205,12 @@ module.exports.cancelOrder = async (req, res) => {
       return res.status(400).json({ message: "Invalid order id" });
     }
 
-    console.error("Error cancelling order:", err);
-    return res.status(500).json({ message: "Error cancelling order" });
+    return next(err);
   }
 };
 
 // Delete
-module.exports.deleteOrder = async (req, res) => {
+module.exports.deleteOrder = async (req, res, next) => {
   try {
     const { id } = req.params;
 
@@ -236,7 +232,6 @@ module.exports.deleteOrder = async (req, res) => {
       return res.status(400).json({ message: "Invalid order id" });
     }
 
-    console.error("Error deleting order:", err);
-    return res.status(500).json({ message: "Error deleting order" });
+    return next(err);
   }
 };

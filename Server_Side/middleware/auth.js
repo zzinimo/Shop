@@ -16,7 +16,15 @@ module.exports.checkToken = async (req, res, next) => {
 
     return next();
   } catch (err) {
-    res.status(401).json({ err: "Error checking token" });
+    if (err.name === "JsonWebToekenError") {
+      return res.status(401).json({ error: "JsonWebTokenError" });
+    }
+
+    if (err.name === "TokenExpiredError") {
+      return res.status(401).json({ error: "TokenExpiredError" });
+    }
+
+    return next(err);
   }
 };
 
@@ -33,6 +41,6 @@ module.exports.getUserFromDb = async (req, res, next) => {
 
     return next();
   } catch (err) {
-    res.status(500).json({ err: "Internal database error" });
+    return next(err);
   }
 };

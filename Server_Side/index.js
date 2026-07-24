@@ -2,10 +2,11 @@ const express = require("express");
 const app = express();
 const mongoose = require("mongoose");
 const cors = require("cors");
-const cookieparser = require("cookie-parser");
+const cookieParser = require("cookie-parser");
 const clothingRouter = require("./routes/clothingItemRouter");
 const ordersRouter = require("./routes/ordersRouter");
-const loginRouter = require("./routes/loginRouter");
+const userRouter = require("./routes/userRouter");
+const { errorHandler } = require("./middleware/errors");
 
 const { PORT = 3000 } = process.env;
 
@@ -20,6 +21,7 @@ async function connectDB() {
 
 connectDB();
 app.use(express.static("public"));
+app.use(cookieParser());
 app.use(
   cors({
     origin: "http://localhost:5173",
@@ -28,8 +30,9 @@ app.use(
 );
 app.use(express.json());
 app.use("/clothing-items", clothingRouter);
-app.use("/login", loginRouter);
+app.use("/login", userRouter);
 app.use("/orders", ordersRouter);
+app.use(errorHandler);
 
 app.listen(PORT, () => {
   console.log(`App listening to port ${PORT}`);
