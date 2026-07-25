@@ -1,4 +1,4 @@
-const router = require("express").Router();
+const router = require('express').Router();
 const {
   createOrder,
   getOrderById,
@@ -6,18 +6,23 @@ const {
   updateStatus,
   cancelOrder,
   deleteOrder,
-} = require("../controllers/orders");
+} = require('../controllers/orders');
 
-router.get("/", getOrder);
-router.get("/:id", getOrderById);
-router.post("/", createOrder);
-router.patch("/:id/status", updateStatus);
-router.patch("/:id/cancel", cancelOrder);
-<<<<<<< HEAD
+const {
+  optionalAuth,
+  checkToken,
+  getUserFromDb,
+} = require('../middleware/auth');
 
-=======
->>>>>>> dc0e07f (created auth middleware and global error handling function that was added to index.js)
-router.delete("/:id/delete", deleteOrder);
-router.delete("/:id", deleteOrder);
+// base url '/orders'
+
+router.get('/', checkToken, getUserFromDb, getOrder);
+router.get('/:id', checkToken, getUserFromDb, getOrderById);
+
+router.post('/', optionalAuth, createOrder);
+
+router.patch('/:id/status', checkToken, getUserFromDb, updateStatus);
+router.patch('/:id/cancel', checkToken, getUserFromDb, cancelOrder);
+router.delete('/:id', checkToken, getUserFromDb, deleteOrder);
 
 module.exports = router;

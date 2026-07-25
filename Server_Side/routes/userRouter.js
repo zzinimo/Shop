@@ -7,6 +7,7 @@ const {
   logout,
   getCurrentUser,
 } = require("../controllers/users");
+//base enpoint = /login/
 
 router.get("/me", checkToken, getUserFromDb, getCurrentUser); //checked
 router.post("/", login); //checked

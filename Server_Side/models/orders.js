@@ -3,16 +3,33 @@ const validator = require("validator");
 
 const orderSchema = new mongoose.Schema(
   {
+    guestEmail: {
+      type: String,
+      lowercase: true,
+      validate: {
+        validator: function (value) {
+          return validator.isEmail(value);
+        },
+        message: "please provide a valid email address",
+      },
+    },
+
+    userId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+      required: false,
+    },
+
     customer: {
       firstName: {
         type: String,
-        required: true,
+        required: false,
         trim: true,
       },
 
       lastName: {
         type: String,
-        required: true,
+        required: false,
         trim: true,
       },
 

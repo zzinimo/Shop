@@ -3,6 +3,7 @@ const User = require("../models/users");
 const secretKey = "MY_SECRET_KEY";
 
 module.exports.checkToken = async (req, res, next) => {
+  //for endpoints that should only work for logged in users
   try {
     const token = req.cookies.user;
 
@@ -42,5 +43,20 @@ module.exports.getUserFromDb = async (req, res, next) => {
     return next();
   } catch (err) {
     return next(err);
+  }
+};
+
+//for guest checkouts
+module.exports.optionalAuth = async (req, res, next) => {
+  try {
+    const token = req.cookies.user;
+    if (token) {
+      const user = jwt.verify(token, secretKey);
+      req.user = user;
+    }
+
+    return next();
+  } catch (err) {
+    return next();
   }
 };

@@ -9,75 +9,144 @@ const allowedStatusNames = [
   "cancelled",
 ];
 
+const guestTokenSecretKey = "GUEST_SUPER_SECRET_KEY";
+
 // Create
 module.exports.createOrder = async (req, res, next) => {
-  try {
-    const { customer, shippingAddress, items } = req.body;
+  const user = req.user;
 
-    if (!customer || !shippingAddress) {
-      return res.status(400).json({
-        message: "customer and shippingAddress are required",
-      });
-    }
+  if (req.user) {
+    try {
+      const { customer, shippingAddress, items } = req.body;
 
-    if (!Array.isArray(items) || items.length === 0) {
-      return res.status(400).json({
-        message: "at least one item is required",
-      });
-    }
-
-    const subtotal = items.reduce((sum, item) => {
-      const qty = Number(item.quantity);
-      const price = Number(item.price);
-
-      if (
-        !Number.isFinite(qty) ||
-        qty <= 0 ||
-        !Number.isFinite(price) ||
-        price <= 0
-      ) {
-        throw new Error("INVALID_ITEM");
+      if (!customer || !shippingAddress) {
+        return res.status(400).json({
+          message: "customer and shippingAddress are required",
+        });
       }
 
-      return sum + qty * price;
-    }, 0);
+      if (!Array.isArray(items) || items.length === 0) {
+        return res.status(400).json({
+          message: "at least one item is required",
+        });
+      }
 
-    const shipping = 0;
-    const total = subtotal + shipping;
+      const subtotal = items.reduce((sum, item) => {
+        const qty = Number(item.quantity);
+        const price = Number(item.price);
 
-    const newOrder = await Order.create({
-      customer,
-      shippingAddress,
-      items,
-      totals: {
-        subtotal,
-        shipping,
-        total,
-      },
-      status: "pending",
-    });
+        if (
+          !Number.isFinite(qty) ||
+          qty <= 0 ||
+          !Number.isFinite(price) ||
+          price <= 0
+        ) {
+          throw new Error("INVALID_ITEM");
+        }
 
-    return res.status(201).json({
-      message: "Order created",
-      order: newOrder,
-    });
-  } catch (err) {
-    if (err.message === "INVALID_ITEM") {
-      return res.status(400).json({
-        message:
-          "quantity must be greater than 0 and price must be greater than 0",
+        return sum + qty * price;
+      }, 0);
+
+      const shipping = 0;
+      const total = subtotal + shipping;
+
+      const newOrder = await Order.create({
+        userId: new mongoose.Types.ObjectId(req.user.id),
+        customer,
+        shippingAddress,
+        items,
+        totals: {
+          subtotal,
+          shipping,
+          total,
+        },
+        status: "pending",
       });
-    }
 
-    if (err.name === "ValidationError") {
-      return res.status(400).json({
-        message: "Invalid order data",
-        errors: err.errors,
+      return res.status(201).json({
+        message: "Order created",
+        order: newOrder,
       });
-    }
+    } catch (err) {
+      if (err.message === "INVALID_ITEM") {
+        return res.status(400).json({
+          message:
+            "quantity must be greater than 0 and price must be greater than 0",
+        });
+      }
 
-    console.error("Error creating order:", err);
-    return next(err);
+      if (err.name === "ValidationError") {
+        return res.status(400).json({
+          message: "Invalid order data",
+          errors: err.errors,
+        });
+      }
+
+      console.error("Error creating order:", err);
+      return next(err);
+    }
+  } else {
+    //GUEST ORDER LOGIC
+    // ----------------------------------------------------------------------
+    try {
+      const { guestEmail, items, shippingAddress } = req.body;
+
+      if (!guestEmail || !items || !Array.isArray(items) || !shippingAddress) {
+        return res.status(400).json({
+          err: "Email is required, shipping address is required and at least one item in cart.",
+        });
+      }
+      const subtotal = items.reduce((sum, item) => {
+        const qty = Number(item.quantity);
+        const price = Number(item.price);
+
+        if (
+          !Number.isFinite(qty) ||
+          qty <= 0 ||
+          !Number.isFinite(price) ||
+          price <= 0
+        ) {
+          throw new Error("INVALID_ITEM");
+        }
+        return sum + qty * price;
+      }, 0);
+
+      const shipping = 0;
+      const total = subtotal + shipping;
+
+      const newGuestOrder = await Order.create({
+        email: guestEmail,
+        shippingAddress,
+        items: items,
+        totals: {
+          subtotal: subtotal,
+          shipping,
+          total,
+        },
+      });
+
+      const token = await jwt.sign(
+        {
+          orderId: newGuestOrder._id,
+          email: guestEmail,
+        },
+        guestTokenSecretKey,
+
+        { expiresIn: "10m" },
+      );
+
+      res.cookie("guestOrder", token, {
+        httpOnly: true,
+        secure: false,
+        sameSite: "lax",
+        maxAge: 600000,
+      });
+
+      return res.status(200).json({ message: "Guest order submitted" });
+    } catch (err) {
+      console.error("order creating guest order :", err);
+      return next(err);
+    }
   }
 };
 
@@ -85,9 +154,12 @@ module.exports.createOrder = async (req, res, next) => {
 module.exports.getOrder = async (req, res, next) => {
   try {
     const { status } = req.query;
+    const user = req.currentUser;
 
     if (!status) {
-      const orders = await Order.find({}).sort({ createdAt: -1 });
+      const orders = await Order.find({ userId: user._id }).sort({
+        createdAt: -1,
+      });
       return res.status(200).json({ orders });
     }
 
@@ -95,7 +167,9 @@ module.exports.getOrder = async (req, res, next) => {
       return res.status(400).json({ message: "Invalid status query" });
     }
 
-    const filteredOrders = await Order.find({ status }).sort({ createdAt: -1 });
+    const filteredOrders = await Order.find({ userId: user._id, status }).sort({
+      createdAt: -1,
+    });
     return res.status(200).json({ orders: filteredOrders });
   } catch (err) {
     next(err);
@@ -105,6 +179,7 @@ module.exports.getOrder = async (req, res, next) => {
 module.exports.getOrderById = async (req, res, next) => {
   try {
     const { id } = req.params;
+    const user = req.currentUser;
 
     if (!mongoose.isValidObjectId(id)) {
       return res.status(400).json({ message: "Invalid order id" });
@@ -113,6 +188,10 @@ module.exports.getOrderById = async (req, res, next) => {
     const order = await Order.findById(id);
     if (!order) {
       return res.status(404).json({ message: "Order not found" });
+    }
+
+    if (order.userId.toString() !== user._id.toString()) {
+      return res.status(403).json({ err: "Not authorized to view this order" });
     }
 
     return res.status(200).json({ order });
@@ -126,6 +205,8 @@ module.exports.updateStatus = async (req, res, next) => {
   try {
     const { id } = req.params;
     const { status } = req.body;
+
+    const user = req.currentUser;
 
     if (!mongoose.isValidObjectId(id)) {
       return res.status(400).json({ message: "Invalid order id" });
@@ -155,6 +236,12 @@ module.exports.updateStatus = async (req, res, next) => {
       return res.status(404).json({ message: "Order not found" });
     }
 
+    if (updatedOrder.userId.toString() !== user._id.toString()) {
+      return res
+        .status(403)
+        .json({ error: "Not authorized to update this order" });
+    }
+
     return res.status(200).json({
       message: "Order status updated",
       order: updatedOrder,
@@ -178,6 +265,7 @@ module.exports.updateStatus = async (req, res, next) => {
 module.exports.cancelOrder = async (req, res, next) => {
   try {
     const { id } = req.params;
+    const user = req.currentUser;
 
     if (!mongoose.isValidObjectId(id)) {
       return res.status(400).json({ message: "Invalid order id" });
@@ -186,6 +274,12 @@ module.exports.cancelOrder = async (req, res, next) => {
     const order = await Order.findById(id);
     if (!order) {
       return res.status(404).json({ message: "Order not found" });
+    }
+
+    if (order.userId.toString() !== user._id.toString()) {
+      return res
+        .status(403)
+        .json({ error: "Not authorized to cancel this order" });
     }
 
     if (order.status === "pending" || order.status === "paid") {
@@ -213,6 +307,7 @@ module.exports.cancelOrder = async (req, res, next) => {
 module.exports.deleteOrder = async (req, res, next) => {
   try {
     const { id } = req.params;
+    const user = req.currentUser;
 
     if (!mongoose.isValidObjectId(id)) {
       return res.status(400).json({ message: "Invalid order id" });
@@ -221,6 +316,12 @@ module.exports.deleteOrder = async (req, res, next) => {
     const deletedOrder = await Order.findByIdAndDelete(id);
     if (!deletedOrder) {
       return res.status(404).json({ message: "Order not found" });
+    }
+
+    if (deletedOrder.userId.toString() !== user._id.toString()) {
+      res
+        .status(403)
+        .json({ err: "You are not authorized to delete this order" });
     }
 
     return res.status(200).json({
