@@ -1,5 +1,6 @@
 const mongoose = require("mongoose");
 const Order = require("../models/orders");
+const jwt = require("jsonwebtoken");
 
 const allowedStatusNames = [
   "pending",
@@ -115,7 +116,7 @@ module.exports.createOrder = async (req, res, next) => {
       const total = subtotal + shipping;
 
       const newGuestOrder = await Order.create({
-        email: guestEmail,
+        guestEmail: guestEmail,
         shippingAddress,
         items: items,
         totals: {
@@ -319,7 +320,7 @@ module.exports.deleteOrder = async (req, res, next) => {
     }
 
     if (deletedOrder.userId.toString() !== user._id.toString()) {
-      res
+      return res
         .status(403)
         .json({ err: "You are not authorized to delete this order" });
     }
