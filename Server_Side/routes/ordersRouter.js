@@ -1,4 +1,4 @@
-const router = require('express').Router();
+const router = require("express").Router();
 const {
   createOrder,
   getOrderById,
@@ -6,23 +6,23 @@ const {
   updateStatus,
   cancelOrder,
   deleteOrder,
-} = require('../controllers/orders');
+} = require("../controllers/orders");
 
 const {
   optionalAuth,
   checkToken,
   getUserFromDb,
-} = require('../middleware/auth');
+} = require("../middleware/auth");
 
-// base url '/orders'
+// base url "/orders"
 
-router.get('/', checkToken, getUserFromDb, getOrder);
-router.get('/:id', checkToken, getUserFromDb, getOrderById);
+router.get("/", checkToken, getUserFromDb, getOrder);
+router.get("/:id", checkToken, getUserFromDb, getOrderById);
 
-router.post('/', optionalAuth, createOrder);
+router.post("/", optionalAuth, createOrder); //checked
 
-router.patch('/:id/status', checkToken, getUserFromDb, updateStatus);
-router.patch('/:id/cancel', checkToken, getUserFromDb, cancelOrder);
-router.delete('/:id', checkToken, getUserFromDb, deleteOrder);
+router.patch("/:id/status", checkToken, getUserFromDb, updateStatus);
+router.patch("/:id/cancel", checkToken, getUserFromDb, cancelOrder);
+router.delete("/:id", checkToken, getUserFromDb, deleteOrder);
 
 module.exports = router;
