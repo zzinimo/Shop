@@ -59,7 +59,7 @@ module.exports.login = async (req, res, next) => {
     const isMatch = await bcrypt.compare(password, user.password);
 
     if (!isMatch) {
-      return res.status(401).json({ error: "Invalid email or password" });
+      return res.status(401).json({ message: "Invalid email or password" });
     }
 
     const token = jwt.sign({ id: user._id, email: user.email }, secretKey, {
@@ -101,7 +101,7 @@ module.exports.getCurrentUser = async (req, res, next) => {
     const currentUser = req.currentUser;
 
     if (!currentUser) {
-      res.status(401).json({ error: "Current user not found" });
+      res.status(401).json({ message: "Current user not found" });
     }
 
     res.status(200).json({

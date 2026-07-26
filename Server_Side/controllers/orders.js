@@ -94,7 +94,8 @@ module.exports.createOrder = async (req, res, next) => {
 
       if (!guestEmail || !items || !Array.isArray(items) || !shippingAddress) {
         return res.status(400).json({
-          err: "Email is required, shipping address is required and at least one item in cart.",
+          message:
+            "Email is required, shipping address is required and at least one item in cart.",
         });
       }
       const subtotal = items.reduce((sum, item) => {
@@ -192,7 +193,9 @@ module.exports.getOrderById = async (req, res, next) => {
     }
 
     if (order.userId.toString() !== user._id.toString()) {
-      return res.status(403).json({ err: "Not authorized to view this order" });
+      return res
+        .status(403)
+        .json({ message: "Not authorized to view this order" });
     }
 
     return res.status(200).json({ order });
@@ -240,7 +243,7 @@ module.exports.updateStatus = async (req, res, next) => {
     if (updatedOrder.userId.toString() !== user._id.toString()) {
       return res
         .status(403)
-        .json({ error: "Not authorized to update this order" });
+        .json({ message: "Not authorized to update this order" });
     }
 
     return res.status(200).json({
@@ -280,7 +283,7 @@ module.exports.cancelOrder = async (req, res, next) => {
     if (order.userId.toString() !== user._id.toString()) {
       return res
         .status(403)
-        .json({ error: "Not authorized to cancel this order" });
+        .json({ message: "Not authorized to cancel this order" });
     }
 
     if (order.status === "pending" || order.status === "paid") {
@@ -322,7 +325,7 @@ module.exports.deleteOrder = async (req, res, next) => {
     if (deletedOrder.userId.toString() !== user._id.toString()) {
       return res
         .status(403)
-        .json({ err: "You are not authorized to delete this order" });
+        .json({ message: "You are not authorized to delete this order" });
     }
 
     return res.status(200).json({
