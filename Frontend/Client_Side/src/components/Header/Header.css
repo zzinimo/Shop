@@ -10,6 +10,16 @@
   font-size: 15px;
 }
 
+.header__signIn_btn {
+  border: none;
+  color: white;
+  font-size: 12px;
+  font-weight: 500;
+  border-radius: 5px;
+  padding: 5px;
+  background-color: rgb(249, 99, 44);
+}
+
 .header__cart_button {
   border: none;
   width: 40px;

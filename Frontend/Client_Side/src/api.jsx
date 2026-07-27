@@ -1,5 +1,6 @@
 const clothingUrl = "http://localhost:3000/clothing-items";
 const orderUrl = "http://localhost:3000/orders";
+const userUrl = "http://localhost:3000/login";
 
 const checkResponse = async (
   response,
@@ -39,6 +40,7 @@ export const getClothingItems = async () => {
 export const getOrder = async () => {
   const response = await fetch(orderUrl, {
     method: "GET",
+    credentials: "include",
     headers: {
       "Content-Type": "application/json",
     },
@@ -50,6 +52,7 @@ export const getOrder = async () => {
 export const getOrderById = async (id) => {
   const response = await fetch(`${orderUrl}/${id}`, {
     method: "GET",
+    credentials: "include",
     headers: {
       "Content-Type": "application/json",
     },
@@ -61,6 +64,7 @@ export const getOrderById = async (id) => {
 export const createOrder = async (orderPayload) => {
   const response = await fetch(orderUrl, {
     method: "POST",
+    credentials: "include",
     headers: {
       "Content-Type": "application/json",
     },
@@ -73,6 +77,7 @@ export const createOrder = async (orderPayload) => {
 export const updateStatus = async (id, status, updatePayload) => {
   const response = await fetch(`${orderUrl}/${id}/${status}`, {
     method: "PATCH",
+    credentials: "include",
     headers: {
       "Content-Type": "application/json",
     },
@@ -85,6 +90,7 @@ export const updateStatus = async (id, status, updatePayload) => {
 export const cancelOrder = async (id) => {
   const response = await fetch(`${orderUrl}/${id}/cancel`, {
     method: "PATCH",
+    credentials: "include",
     headers: {
       "Content-Type": "application/json",
     },
@@ -96,10 +102,30 @@ export const cancelOrder = async (id) => {
 export const deleteOrder = async (id) => {
   const response = await fetch(`${orderUrl}/${id}`, {
     method: "DELETE",
+    credentials: "include",
     headers: {
       "Content-Type": "application/json",
     },
   });
 
   return checkResponse(response, "Error deleting order");
+};
+
+//users
+
+export const createUser = async ({ email, password, username }) => {
+  const response = await fetch(`${userUrl}/register`, {
+    method: "POST",
+    credentials: "include",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      email,
+      password,
+      username,
+    }),
+  });
+
+  return checkResponse(response, "Error creating user");
 };

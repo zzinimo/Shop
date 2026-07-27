@@ -16,7 +16,7 @@ import Cart from "../Cart/Cart.jsx";
 import Checkout from "../Checkout/Checkout.jsx";
 
 //context
-import { cartContext } from "../../context.js";
+import { cartContext, loggedInContext } from "../../context.js";
 
 //Types
 
@@ -26,6 +26,7 @@ function App() {
 
   const [isPanelOpen, setIsPanelOpen] = useState(false);
   const [isCartOpen, setIsCartOpen] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   const handleOutsideCartClick = (e) => {
     console.log("target", e.target);
@@ -44,55 +45,57 @@ function App() {
           setIsCartOpen,
         }}
       >
-        {isCartOpen && (
-          <div className="cart__overlay" onClick={handleOutsideCartClick}>
-            <div className="cart__panel" onClick={(e) => e.stopPropagation()}>
-              <Cart className={isCartOpen ? "open" : ""} />
+        <loggedInContext.Provider value={{ isLoggedIn, setIsLoggedIn }}>
+          {isCartOpen && (
+            <div className="cart__overlay" onClick={handleOutsideCartClick}>
+              <div className="cart__panel" onClick={(e) => e.stopPropagation()}>
+                <Cart className={isCartOpen ? "open" : ""} />
+              </div>
             </div>
-          </div>
-        )}
-        <Routes>
-          <Route
-            path="/all-products"
-            element={
-              <>
-                <Header
-                  isPanelOpen={isPanelOpen}
-                  setIsPanelOpen={setIsPanelOpen}
-                />
-                <AllProducts />
-              </>
-            }
-          />
-          <Route
-            path="*"
-            element={
-              <>
-                <Header
-                  isPanelOpen={isPanelOpen}
-                  setIsPanelOpen={setIsPanelOpen}
-                />
-                <Main />
-                <OurStory />
-                <Products />
-                <SubscribeForm />
-              </>
-            }
-          />
+          )}
+          <Routes>
+            <Route
+              path="/all-products"
+              element={
+                <>
+                  <Header
+                    isPanelOpen={isPanelOpen}
+                    setIsPanelOpen={setIsPanelOpen}
+                  />
+                  <AllProducts />
+                </>
+              }
+            />
+            <Route
+              path="*"
+              element={
+                <>
+                  <Header
+                    isPanelOpen={isPanelOpen}
+                    setIsPanelOpen={setIsPanelOpen}
+                  />
+                  <Main />
+                  <OurStory />
+                  <Products />
+                  <SubscribeForm />
+                </>
+              }
+            />
 
-          <Route
-            path="/checkout"
-            element={
-              <>
-                <Header
-                  isPanelOpen={isPanelOpen}
-                  setIsPanelOpen={setIsPanelOpen}
-                />
-                <Checkout />
-              </>
-            }
-          />
-        </Routes>
+            <Route
+              path="/checkout"
+              element={
+                <>
+                  <Header
+                    isPanelOpen={isPanelOpen}
+                    setIsPanelOpen={setIsPanelOpen}
+                  />
+                  <Checkout />
+                </>
+              }
+            />
+          </Routes>
+        </loggedInContext.Provider>
       </cartContext.Provider>
     </>
   );

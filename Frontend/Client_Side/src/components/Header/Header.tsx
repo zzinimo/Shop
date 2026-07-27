@@ -1,9 +1,10 @@
 import "./Header.css";
-import { useContext } from "react";
-import { cartContext } from "../../context.js";
+import { useContext, useState } from "react";
+import { cartContext, loggedInContext } from "../../context.js";
 import sideThumbnail from "../../assets/menu.png";
 import OptionsPanel from "../OptionsPanel/OptionsPanel.jsx";
 import cartIcon from "../../assets/myCart.png"; 
+import SignInForm from "../SignInForm/SignInForm.jsx";
 
 type HeaderProps = {
   isPanelOpen: boolean, 
@@ -13,13 +14,22 @@ type HeaderProps = {
 }
 
 function Header({ isPanelOpen, setIsPanelOpen }: HeaderProps) {
- ; 
+ const [openModal, setOpenModal] = useState(null); 
 
-  const context = useContext(cartContext); 
-  if(!context){
+
+  const cartCtx = useContext(cartContext); 
+  if(!cartCtx){
     return null;
   }
-  const {cart, setIsCartOpen} = context;  
+  const {cart, setIsCartOpen} = cartCtx;  
+
+  const loginContext = useContext(loggedInContext); 
+  if (!loginContext) {
+    return null;
+  }
+
+  const {isLoggedIn, setIsLoggedIn} = loginContext; 
+  console.log(isLoggedIn); 
 
   const handleThumbnailClick = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
@@ -31,13 +41,22 @@ function Header({ isPanelOpen, setIsPanelOpen }: HeaderProps) {
     setIsCartOpen((pValue: any) => !pValue);
   };
 
+  const handleLoginClick = () => {
+    setOpenModal("sign-in");
+
+  }
+
 
   return (
     <>
+    {openModal === "sign-in" ? 
+  <SignInForm setOpenModal={setOpenModal} /> : null
+  }
       <OptionsPanel isPanelOpen={isPanelOpen} setIsPanelOpen={setIsPanelOpen} />
       <nav className="header__nav_bar">
         <h1 className="header__nav_bar_title">The Collection</h1>
-        <div className="header__nave_bar_button_container">
+        <div className="header__nav_bar_button_container">
+          <button type="button" className="header__signIn_btn" onClick={handleLoginClick}>Sign In</button>
             <button className="header__cart_button" onClick={handleCartClick}>
               <p className="header__cart_button_counter">{cart.length}</p>
           <img src={cartIcon} alt="Cart Icon" className="header__cart_button_img" />
