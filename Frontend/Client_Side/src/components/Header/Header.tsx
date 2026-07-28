@@ -14,7 +14,7 @@ type HeaderProps = {
 }
 
 function Header({ isPanelOpen, setIsPanelOpen }: HeaderProps) {
- const [openModal, setOpenModal] = useState(null); 
+ const [openModal, setOpenModal] = useState<"sign-in" | "sign-up" | null>(null); 
 
 
   const cartCtx = useContext(cartContext); 
@@ -28,7 +28,7 @@ function Header({ isPanelOpen, setIsPanelOpen }: HeaderProps) {
     return null;
   }
 
-  const {isLoggedIn, setIsLoggedIn} = loginContext; 
+  const {isLoggedIn} = loginContext; 
   console.log(isLoggedIn); 
 
   const handleThumbnailClick = (e: React.MouseEvent<HTMLButtonElement>) => {
@@ -49,8 +49,8 @@ function Header({ isPanelOpen, setIsPanelOpen }: HeaderProps) {
 
   return (
     <>
-    {openModal === "sign-in" ? 
-  <SignInForm setOpenModal={setOpenModal} /> : null
+    {openModal === "sign-in" || openModal === "sign-up" ? 
+  <SignInForm openModal={openModal} setOpenModal={setOpenModal} /> : null
   }
       <OptionsPanel isPanelOpen={isPanelOpen} setIsPanelOpen={setIsPanelOpen} />
       <nav className="header__nav_bar">
