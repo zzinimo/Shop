@@ -129,3 +129,31 @@ export const createUser = async ({ email, password, username }) => {
 
   return checkResponse(response, "Error creating user");
 };
+
+export const loginUser = async ({ email, password }) => {
+  const response = await fetch(userUrl, {
+    method: "POST",
+    credentials: "include",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      email,
+      password,
+    }),
+  });
+
+  return checkResponse(response, "Error logging in");
+};
+
+export const logoutUser = async () => {
+  const response = await fetch(`${userUrl}/logout`, {
+    method: "POST",
+    credentials: "include",
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
+
+  return checkResponse(response, "Error logging out");
+};

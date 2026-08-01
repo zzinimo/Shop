@@ -16,13 +16,13 @@ const {
 
 // base url "/orders"
 
-router.get("/", checkToken, getUserFromDb, getOrder);
-router.get("/:id", checkToken, getUserFromDb, getOrderById);
+router.get("/", checkToken, getUserFromDb, getOrder); //checked
+router.get("/:id", checkToken, getUserFromDb, getOrderById); //checked
 
 router.post("/", optionalAuth, createOrder); //checked
 
-router.patch("/:id/status", checkToken, getUserFromDb, updateStatus);
-router.patch("/:id/cancel", checkToken, getUserFromDb, cancelOrder);
-router.delete("/:id", checkToken, getUserFromDb, deleteOrder);
+router.patch("/:id/status", checkToken, getUserFromDb, updateStatus); //checked
+router.patch("/:id/cancel", checkToken, getUserFromDb, cancelOrder); //checked
+router.delete("/:id", checkToken, getUserFromDb, deleteOrder); //checked
 
 module.exports = router;

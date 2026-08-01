@@ -1,13 +1,29 @@
 import "./SignInForm.css";
-import { useEffect, useState } from "react";
-import { createUser } from "../../api.jsx";
+import { useEffect, useState, useContext } from "react";
+import { createUser, loginUser } from "../../api.jsx";
+import { loggedInContext } from "../../context.js";
+import closeButton from "../../assets/closeButton (2).png";
 
 const SignInForm = ({ setOpenModal, openModal }) => {
+  const loginContext = useContext(loggedInContext);
+  if (!loginContext) {
+    return null;
+  }
+  const { isLoggedIn, setIsLoggedIn } = loginContext;
+
+  const isSignUpMode = openModal === "sign-up";
+
   const [userInput, setUserInput] = useState({
     email: "",
     username: "",
     password: "",
   });
+
+  const initialUserInput = {
+    email: "",
+    username: "",
+    password: "",
+  };
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -29,12 +45,29 @@ const SignInForm = ({ setOpenModal, openModal }) => {
 
   const handleFormSubmit = async (e) => {
     e.preventDefault();
-    await createUser(userInput);
+    if (isSignUpMode) {
+      await createUser(userInput);
+      setUserInput(initialUserInput);
+      setOpenModal("sign-in");
+    } else {
+      await loginUser({
+        email: userInput.email,
+        password: userInput.password,
+      });
+      setUserInput(initialUserInput);
+      setIsLoggedIn(true);
+      setOpenModal(null);
+    }
   };
 
   const handleSignUpClick = (e) => {
     e.preventDefault();
     setOpenModal("sign-up");
+  };
+
+  const handleSignInClick = (e) => {
+    e.preventDefault();
+    setOpenModal("sign-in");
   };
 
   useEffect(() => {
@@ -45,6 +78,10 @@ const SignInForm = ({ setOpenModal, openModal }) => {
     };
 
     window.addEventListener("keydown", handleEscapeKeyClick);
+
+    return () => {
+      window.removeEventListener("keydown", handleEscapeKeyClick);
+    };
   }, [setOpenModal]);
   return (
     <>
@@ -55,9 +92,15 @@ const SignInForm = ({ setOpenModal, openModal }) => {
             type="button"
             className="customerForm__close_btn"
           >
-            close
+            <img
+              className="customerForm_close_btn_img"
+              src={closeButton}
+              alt=""
+            />
           </button>
-          <h1 className="customerForm__title">Sign In</h1>
+          <h1 className="customerForm__title">
+            {isSignUpMode ? "Sign Up" : "Sign In"}
+          </h1>
           <div className="customerForm__content">
             <label className="customerForm__label" htmlFor="email">
               Email
@@ -71,7 +114,7 @@ const SignInForm = ({ setOpenModal, openModal }) => {
                 onChange={handleInputChange}
               />
             </label>
-            {openModal === "sign-up" && (
+            {isSignUpMode && (
               <label className="customerForm__label" htmlFor="username">
                 Username
                 <input
@@ -99,13 +142,29 @@ const SignInForm = ({ setOpenModal, openModal }) => {
             </label>
           </div>
           <button type="submit" className="customerForm__submit_btn">
-            Sign Up
+            {isSignUpMode ? "Sign Up" : "Sign In"}
           </button>
-          {openModal === "sign-in" && (
+          {!isSignUpMode && (
             <p className="customerForm__signIn_text">
               Don't have an account?
-              <button type="button" onClick={handleSignUpClick}>
+              <button
+                className="customerForm__signup_btn"
+                type="button"
+                onClick={handleSignUpClick}
+              >
                 Sign Up
+              </button>
+            </p>
+          )}
+          {isSignUpMode && (
+            <p className="customerForm__signIn_text">
+              Already have an account?
+              <button
+                className="customerForm__signIn_btn"
+                type="button"
+                onClick={handleSignInClick}
+              >
+                Sign In
               </button>
             </p>
           )}

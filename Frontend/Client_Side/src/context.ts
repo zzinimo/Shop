@@ -1,5 +1,4 @@
 import { createContext } from "react";
-import type { Dispatch, SetStateAction } from "react";
 
 export type CartItem = {
 	_id: string, 
@@ -8,14 +7,14 @@ export type CartItem = {
 
 export type CartContextType = {
 	cart: CartItem[], 
-	setCart: Dispatch<SetStateAction<CartItem[]>>
+	setCart: (cart: CartItem[]) => void
 	isCartOpen: boolean, 
-	setIsCartOpen: Dispatch<SetStateAction<boolean>>; 
+	setIsCartOpen: (value: any) => void; 
 }
 
 export type LoggedInContextType = {
 	isLoggedIn: boolean;
-	setIsLoggedIn: Dispatch<SetStateAction<boolean>>;
+	setIsLoggedIn: (value: boolean) => void;
 }
 
 export const cartContext = createContext<CartContextType | null>(null);
