@@ -35,19 +35,21 @@ const ordersJoiSchema = Joi.object({
         quantity: Joi.number().integer().min(1).required(),
         price: Joi.number().min(0).required(),
         productId: Joi.string().required(),
-        src: Joi.string().require().trim(),
-        description: Joi.string().required(),
+        src: Joi.string().required().trim(),
+        description: Joi.string().required().trim(),
       }),
     )
     .min(1)
     .required(),
 
   totals: Joi.object({
-    subtotal: Joi.number().required().min(0),
-    shipping: Joi.number().required().min(0),
-    total: Joi.number().required().min(0),
+    subtotal: Joi.number().min(0),
+    shipping: Joi.number().min(0),
+    total: Joi.number().min(0),
   }),
   status: Joi.string()
     .valid("pending", "paid", "shipped", "delivered", "cancelled")
     .default("pending"),
 });
+
+module.exports = ordersJoiSchema;
