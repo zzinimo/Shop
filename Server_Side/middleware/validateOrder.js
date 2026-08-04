@@ -1,9 +1,3 @@
-const statusUpdateSchema = Joi.object({
-  status: Joi.string()
-    .valid("pending", "paid", "shipped", "delivered", "cancelled")
-    .required(),
-});
-
 const validateOrder = (schema) => {
   return async (req, res, next) => {
     try {
@@ -30,7 +24,7 @@ const validateOrderByAuth = (guestSchema, authSchema) => {
       const schema = req.user ? authSchema : guestSchema;
       const options = {
         abortEarly: false,
-        stripUknown: true,
+        stripUnknown: true,
       };
 
       const validatedData = await schema.validateAsync(req.body, options);
@@ -52,4 +46,4 @@ const validateOrderByAuth = (guestSchema, authSchema) => {
   };
 };
 
-module.exports = { validateOrder, validateOrderByAuth, statusUpdateSchema };
+module.exports = { validateOrder, validateOrderByAuth };

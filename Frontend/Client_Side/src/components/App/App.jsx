@@ -1,5 +1,5 @@
 import "./App.css";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Routes, Route } from "react-router-dom";
 
 //css
@@ -21,8 +21,20 @@ import { cartContext, loggedInContext } from "../../context.js";
 //Types
 
 function App() {
-  //state
-  const [shoppingCart, setShoppingCart] = useState([]);
+  const [shoppingCart, setShoppingCart] = useState(() => {
+    let cartData;
+    try {
+      cartData = localStorage.getItem("cart");
+      if (cartData === null) {
+        return [];
+      } else {
+        return JSON.parse(cartData);
+      }
+    } catch (err) {
+      console.error("Failed to parse JSON. Using fallback data istead");
+      return [];
+    }
+  });
 
   const [isPanelOpen, setIsPanelOpen] = useState(false);
   const [isCartOpen, setIsCartOpen] = useState(false);
@@ -35,6 +47,13 @@ function App() {
     }
   };
 
+  useEffect(() => {
+    const saveCartToStorage = () => {
+      localStorage.setItem("cart", JSON.stringify(shoppingCart));
+    };
+
+    saveCartToStorage();
+  }, [shoppingCart]);
   return (
     <>
       <cartContext.Provider
