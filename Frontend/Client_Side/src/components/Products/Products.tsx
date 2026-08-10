@@ -2,6 +2,7 @@ import "./Products.css";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Modal from "../Modal/Modal.jsx";
+import magnifyingGlass from "../../assets/magnifyingGlassMain.svg"; 
 
 import AddToCartButton from "../AddToCartButton/AddToCartButton.js";
 
@@ -26,7 +27,7 @@ function Products() {
   
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
   const [selectedDescription, setSelectedDescription] = useState<string | null>(null);
-  const [selectedPrice, setSelectedPrice] = useState<string | null>(null);
+  const [selectedPrice, setSelectedPrice] = useState<string | null>(null); 
 
   const handleImageClick = (item: ClothingItem) => {
     setIsOpen(true);
@@ -54,15 +55,22 @@ function Products() {
       <div className="products__container">
         <ul className="products">
           {clothingItems.map((item: ClothingItem) => {
-            return (
-              <li key={item._id} className="product">
-                <AddToCartButton product={{ ...item, _id: item._id, quantity: 1 }} /> 
+            // "product"
+            return ( 
+              <li key={item._id} className= "product" >
+                <div className="products__overlay">
+                <img src={magnifyingGlass} alt="Magnifying Glass" />
+              </div>
+
+                <AddToCartButton product={{ ...item, _id: item._id, quantity: 1 }} />
+
                 <img
                   src={`http://localhost:3000${item.src}`}
                   alt="Product Photo"
                   className="product__photo"
                   onClick={() => handleImageClick(item)}
                 />
+                
                 <h6 className="product__title">Clothing</h6>
                 <p className="product__price">{item.price}</p>
                 <p className="product__description">{item.description}</p>

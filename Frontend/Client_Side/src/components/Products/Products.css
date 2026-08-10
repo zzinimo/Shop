@@ -21,6 +21,22 @@
   list-style-type: none;
   border-radius: 5px;
   overflow: hidden;
+  cursor: pointer;
+}
+
+.products__overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s ease-in;
+}
+
+.product:hover .products__overlay {
+  opacity: 1;
 }
 
 .product .add__button {
