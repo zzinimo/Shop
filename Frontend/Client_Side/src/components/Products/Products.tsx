@@ -58,18 +58,19 @@ function Products() {
             // "product"
             return ( 
               <li key={item._id} className= "product" >
-                <div className="products__overlay">
-                <img src={magnifyingGlass} alt="Magnifying Glass" />
-              </div>
-
                 <AddToCartButton product={{ ...item, _id: item._id, quantity: 1 }} />
 
-                <img
-                  src={`http://localhost:3000${item.src}`}
-                  alt="Product Photo"
-                  className="product__photo"
-                  onClick={() => handleImageClick(item)}
-                />
+                <div className="product__photo-wrapper">
+                  <div className="products__overlay">
+                    <img src={magnifyingGlass} alt="Magnifying Glass" />
+                  </div>
+                  <img
+                    src={`http://localhost:3000${item.src}`}
+                    alt="Product Photo"
+                    className="product__photo"
+                    onClick={() => handleImageClick(item)}
+                  />
+                </div>
                 
                 <h6 className="product__title">Clothing</h6>
                 <p className="product__price">{item.price}</p>

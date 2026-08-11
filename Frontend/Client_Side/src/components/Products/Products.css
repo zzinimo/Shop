@@ -17,11 +17,15 @@
 .product {
   position: relative;
   width: 100%;
-  width: 200;
+  width: 200px;
   list-style-type: none;
   border-radius: 5px;
   overflow: hidden;
   cursor: pointer;
+}
+
+.product__photo-wrapper {
+  position: relative;
 }
 
 .products__overlay {
@@ -32,11 +36,19 @@
   justify-content: center;
   opacity: 0;
   pointer-events: none;
-  transition: opacity 0.2s ease-in;
+  transition:
+    opacity 0.2s ease-in,
+    background-color 0.2s ease-in;
+  border-radius: 3px;
 }
 
-.product:hover .products__overlay {
+.product__photo-wrapper:hover .products__overlay {
   opacity: 1;
+  background-color: rgba(0, 0, 0, 0.5);
+}
+
+.product__photo-wrapper:hover {
+  box-shadow: 5px 8px 12px rgba(0, 0, 0, 0.4);
 }
 
 .product .add__button {

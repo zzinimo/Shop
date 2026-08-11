@@ -1,6 +1,7 @@
 const clothingUrl = "http://localhost:3000/clothing-items";
 const orderUrl = "http://localhost:3000/orders";
 const userUrl = "http://localhost:3000/login";
+const subscriberUrl = "http://localhost:3000/subscribe";
 
 const checkResponse = async (
   response,
@@ -20,6 +21,18 @@ const checkResponse = async (
   }
 
   return data;
+};
+
+export const subScribeEmail = async (email) => {
+  const response = await fetch(subscriberUrl, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ email }),
+  });
+
+  return checkResponse(response);
 };
 
 //clothing

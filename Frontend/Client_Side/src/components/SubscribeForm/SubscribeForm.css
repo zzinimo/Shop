@@ -1,3 +1,8 @@
+.subscribe__form {
+  display: flex;
+  flex-direction: column;
+}
+
 .subscribe__form_heading {
   width: 80px;
   margin: 0 auto;
@@ -24,4 +29,19 @@
 .subscribe__form_input:focus {
   border: 2px solid rgb(244, 93, 93);
   outline: none;
+}
+
+.subscribe__form_input--error::placeholder {
+  color: rgb(244, 93, 93);
+}
+
+.subscribe__form_submit-btn {
+  font-size: 12px;
+  width: 60px;
+  height: 25px;
+  margin: 0 auto 10px;
+  border-radius: 8px;
+  border: none;
+  background-color: rgb(249, 99, 44);
+  color: white;
 }
