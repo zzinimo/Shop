@@ -1,7 +1,9 @@
-const clothingUrl = "http://localhost:3000/clothing-items";
-const orderUrl = "http://localhost:3000/orders";
-const userUrl = "http://localhost:3000/login";
-const subscriberUrl = "http://localhost:3000/subscribe";
+import { apiBaseUrl } from "./config.ts";
+
+const clothingUrl = `${apiBaseUrl}/clothing-items`;
+const orderUrl = `${apiBaseUrl}/orders`;
+const userUrl = `${apiBaseUrl}/login`;
+const subscriberUrl = `${apiBaseUrl}/subscribe`;
 
 const checkResponse = async (
   response,
@@ -11,9 +13,8 @@ const checkResponse = async (
 
   try {
     data = await response.json();
-  } catch (err) {
+  } catch {
     console.log("error in catch of check response ");
-    data = null;
   }
 
   if (!response.ok) {

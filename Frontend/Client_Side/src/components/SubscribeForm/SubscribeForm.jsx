@@ -42,9 +42,9 @@ function SubscribeForm() {
           onChange={handleInputChange}
         />
         <button
-          className="subscribe__form_submit-btn"
+          className={`subscribe__form_submit-btn ${input.email === "" ? "subscribe__form_submit-btn--error" : ""}`}
           type="submit"
-          disabled={false}
+          disabled={input.email === "" && true}
         >
           Submit
         </button>

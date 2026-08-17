@@ -8,7 +8,6 @@ function Modal({
   selectedDescription,
   selectedPrice,
   setIsOpen,
-  isOpen,
 }) {
   useEffect(() => {
     const handleEscapeKeyClick = (e) => {

@@ -52,7 +52,7 @@ function Cart({ className = "" }) {
                 <div className="list__item_container" key={cartItem._id}>
                   <li className="cart__container_list_item">
                     <img
-                      src={`http://localhost:3000${cartItem.src}`}
+                      src={`${import.meta.env.VITE_API_URL || "http://localhost:3000"}${cartItem.src}`}
                       alt=""
                       className="cart__container_list_item_img"
                     />

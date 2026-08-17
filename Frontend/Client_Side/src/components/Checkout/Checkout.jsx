@@ -1,15 +1,11 @@
 import "./Checkout.css";
-import { useState, useEffect, useContext } from "react";
+import { useState, useContext } from "react";
 import { cartContext } from "../../context.js";
 import { createOrder } from "../../api.jsx";
 
 function Checkout() {
   const context = useContext(cartContext);
-  if (!context) {
-    return null;
-  }
-
-  const { cart } = context;
+  const { cart = [] } = context || {};
 
   const [shippingAddress, setShippingAddress] = useState(true);
 
@@ -41,39 +37,6 @@ function Checkout() {
     items: [],
   };
 
-  // PAYMENT FORM INPUT STATE
-
-  const [paymentInput, setPaymentInput] = useState({
-    cardName: "",
-    cardNumber: "",
-    cardExperation: "",
-    card_cvc: "",
-    billing_zip: "",
-  });
-
-  //PAYMENT INFORMATION ITITIAL OBJECT USED TO CLEAR STATE
-
-  const initialPaymentInformationInput = {
-    cardName: "",
-    cardNumber: "",
-    cardExperation: "",
-    card_cvc: "",
-    billing_zip: "",
-  };
-
-  // PAYMENT FORM ONCHANGE HANDLER
-
-  const hanglePaymentFormInputChange = (e) => {
-    const { name, value } = e.target;
-
-    setPaymentInput((prev) => {
-      return {
-        ...prev,
-        [name]: value,
-      };
-    });
-  };
-
   // PERSONAL INFORMATION ONCHANGE HANDLER
 
   const handleInputChange = (e) => {
@@ -98,8 +61,8 @@ function Checkout() {
 
   // SUBMIT FORM HANDLER THAT CREATES ORDER AND CLEARS INPUTS
 
-  const handleSubmitOrder = async () => {
-    console.log("order submitted");
+  const handleSubmitOrder = async (e) => {
+    e.preventDefault();
     const itemsToOrder = cart.map((cartItem) => ({
       quantity: Number(cartItem.quantity ?? 1),
       price: Number(
@@ -117,7 +80,6 @@ function Checkout() {
         items: itemsToOrder,
       });
       setUserInput(initialPersonalInformationInput);
-      setPaymentInput(initialPaymentInformationInput);
     } catch (err) {
       console.error("Error creating order:", err);
     }
@@ -128,7 +90,7 @@ function Checkout() {
 
   return (
     <>
-      <form id="checkout__form">
+      <form id="checkout__form" onSubmit={handleSubmitOrder}>
         <h1 className="checkout__form_title">Personal Information</h1>
         <label htmlFor="firstName">
           <input
@@ -218,87 +180,10 @@ function Checkout() {
             />
           </label>
         ) : null}
+        <button type="submit" className="checkoutForm__submit_btn">
+          Submit Order
+        </button>
       </form>
-      {/* ------------------------------------------------------------------------------------------------------------------------- */}
-      <form id="payment__Form">
-        <h1 className="payment__form_title">Payment Form</h1>
-        <label htmlFor="cardName">
-          <input
-            type="text"
-            id="cardName"
-            name="cardName"
-            value={paymentInput.cardName ?? ""}
-            placeholder="Name on Card"
-            className="payment__form_input"
-            required
-            onChange={hanglePaymentFormInputChange}
-          />
-        </label>
-        <label htmlFor="cardNumber">
-          <input
-            id="cardNumber"
-            name="cardNumber"
-            value={paymentInput.cardNumber ?? ""}
-            type="text"
-            inputMode="numeric"
-            pattern="\d*"
-            placeholder="Card Number"
-            required
-            className="payment__form_input"
-            onChange={hanglePaymentFormInputChange}
-          />
-        </label>
-
-        <label htmlFor="cardExperation">
-          <input
-            type="text"
-            id="cardExperation"
-            name="cardExperation"
-            value={paymentInput.cardExperation ?? ""}
-            placeholder="MM / YY"
-            inputMode="numeric"
-            maxLength={7}
-            required
-            className="payment__form_input"
-            onChange={hanglePaymentFormInputChange}
-          />
-        </label>
-        <label htmlFor="card_cvc">
-          <input
-            type="text"
-            id="card_cvc"
-            name="card_cvc"
-            value={paymentInput.card_cvc ?? ""}
-            inputMode="numeric"
-            required
-            maxLength={3}
-            placeholder="CVC"
-            className="payment__form_input payment__form_input_type_cvc"
-            onChange={hanglePaymentFormInputChange}
-          />
-        </label>
-
-        <label htmlFor="billing_zip">
-          <input
-            type="text"
-            id="billing_zip"
-            name="billing_zip"
-            value={paymentInput.billing_zip ?? ""}
-            required
-            maxLength={5}
-            placeholder="Billing Zip Code"
-            className="payment__form_input"
-            onChange={hanglePaymentFormInputChange}
-          />
-        </label>
-      </form>
-      <button
-        type="button"
-        onClick={handleSubmitOrder}
-        className="checkoutForm__submit_btn"
-      >
-        Submit Order
-      </button>
     </>
   );
 }

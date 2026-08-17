@@ -10,7 +10,8 @@ const allowedStatusNames = [
   "cancelled",
 ];
 
-const guestTokenSecretKey = "GUEST_SUPER_SECRET_KEY";
+const guestTokenSecretKey =
+  process.env.GUEST_ORDER_SECRET || process.env.JWT_SECRET;
 
 // Create
 module.exports.createOrder = async (req, res, next) => {
@@ -139,8 +140,8 @@ module.exports.createOrder = async (req, res, next) => {
 
       res.cookie("guestOrder", token, {
         httpOnly: true,
-        secure: false,
-        sameSite: "lax",
+        secure: process.env.NODE_ENV === "production",
+        sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
         maxAge: 600000,
       });
 

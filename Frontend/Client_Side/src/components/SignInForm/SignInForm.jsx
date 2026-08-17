@@ -6,10 +6,7 @@ import closeButton from "../../assets/closeButton (2).png";
 
 const SignInForm = ({ setOpenModal, openModal }) => {
   const loginContext = useContext(loggedInContext);
-  if (!loginContext) {
-    return null;
-  }
-  const { isLoggedIn, setIsLoggedIn } = loginContext;
+  const { setIsLoggedIn } = loginContext || {};
 
   const isSignUpMode = openModal === "sign-up";
 

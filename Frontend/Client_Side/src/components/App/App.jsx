@@ -30,7 +30,7 @@ function App() {
       } else {
         return JSON.parse(cartData);
       }
-    } catch (err) {
+    } catch {
       console.error("Failed to parse JSON. Using fallback data istead");
       return [];
     }

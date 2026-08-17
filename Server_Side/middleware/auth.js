@@ -1,6 +1,10 @@
 const jwt = require("jsonwebtoken");
 const User = require("../models/users");
-const secretKey = "MY_SECRET_KEY";
+const secretKey = process.env.JWT_SECRET;
+
+if (!secretKey) {
+  throw new Error("JWT_SECRET is required");
+}
 
 module.exports.checkToken = async (req, res, next) => {
   //for endpoints that should only work for logged in users
@@ -17,7 +21,7 @@ module.exports.checkToken = async (req, res, next) => {
 
     return next();
   } catch (err) {
-    if (err.name === "JsonWebToekenError") {
+    if (err.name === "JsonWebTokenError") {
       return res.status(401).json({ error: "JsonWebTokenError" });
     }
 

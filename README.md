@@ -1,16 +1,46 @@
-# React + Vite
+# E-Commerce Store
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Full-stack clothing store built with React, Vite, Express, MongoDB, and Mongoose.
 
-Currently, two official plugins are available:
+## Features
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+- Product browsing and product detail modal
+- Persistent cart using local storage
+- User registration and cookie-based login
+- Guest and authenticated order flows
+- Newsletter subscription with duplicate-email protection
+- Joi request validation and centralized error responses
 
-## React Compiler
+## Project Structure
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+- `Frontend/Client_Side`: canonical Vite frontend
+- `Server_Side`: Express API, MongoDB models, authentication, and validation
 
-## Expanding the ESLint configuration
+The root-level frontend files are legacy duplicates retained during development. Use `Frontend/Client_Side` for the current application.
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+## Local Setup
+
+1. Install MongoDB and start a local database.
+2. Copy `Server_Side/.env.example` to `Server_Side/.env` and set strong secrets.
+3. Copy `Frontend/Client_Side/.env.example` to `Frontend/Client_Side/.env`.
+4. Install dependencies in both `Server_Side` and `Frontend/Client_Side`.
+5. Start the API with `npm start` from `Server_Side`.
+6. Start the frontend with `npm run dev` from `Frontend/Client_Side`.
+
+## API Overview
+
+- `GET /clothing-items`
+- `POST /login/register`
+- `POST /login`
+- `POST /login/logout`
+- `GET /orders`
+- `POST /orders`
+- `POST /subscribe`
+
+## Testing
+
+Run server validation tests with `npm test` from `Server_Side`. Run the frontend production check with `npm run build` from `Frontend/Client_Side`.
+
+## Payment Status
+
+The checkout currently creates an order without collecting card details. A real payment provider should be integrated before accepting payments in production.

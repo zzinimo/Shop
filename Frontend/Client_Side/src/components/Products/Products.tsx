@@ -31,7 +31,7 @@ function Products() {
 
   const handleImageClick = (item: ClothingItem) => {
     setIsOpen(true);
-    setSelectedImage(`http://localhost:3000${item.src}`);
+    setSelectedImage(`${import.meta.env.VITE_API_URL || "http://localhost:3000"}${item.src}`);
     setSelectedDescription(item.description);
     setSelectedPrice(item.price); 
   };
@@ -44,7 +44,6 @@ function Products() {
     <>
       {isOpen && (
         <Modal
-          isOpen={isOpen}
           selectedImage={selectedImage}
           selectedDescription={selectedDescription}
           selectedPrice={selectedPrice}
@@ -65,7 +64,7 @@ function Products() {
                     <img src={magnifyingGlass} alt="Magnifying Glass" />
                   </div>
                   <img
-                    src={`http://localhost:3000${item.src}`}
+                    src={`${import.meta.env.VITE_API_URL || "http://localhost:3000"}${item.src}`}
                     alt="Product Photo"
                     className="product__photo"
                     onClick={() => handleImageClick(item)}

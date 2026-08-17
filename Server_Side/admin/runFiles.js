@@ -1,11 +1,14 @@
 const mongoose = require("mongoose");
+require("dotenv").config();
 
 const readFiles = require("../fileRead");
 const ClothingItems = require("../models/clothingItems");
 
 const addToDB = async () => {
   try {
-    await mongoose.connect("mongodb://localhost:27017/ECOMMERCE");
+    await mongoose.connect(
+      process.env.MONGODB_URI || "mongodb://localhost:27017/ECOMMERCE",
+    );
     const files = await readFiles(); //array
     const existingItemsInDb = await ClothingItems.find({}, "src"); //array of objects [{}]
     const existingSrcs = existingItemsInDb.map((item) => item.src); //array of src from DB

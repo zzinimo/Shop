@@ -4,8 +4,7 @@ const checkToken = require("../middleware/auth.js");
 
 const User = require("../models/users");
 
-//move on process.env later
-const secretKey = "MY_SECRET_KEY";
+const secretKey = process.env.JWT_SECRET;
 
 module.exports.createUser = async (req, res, next) => {
   const saltRounds = 10;
@@ -68,8 +67,8 @@ module.exports.login = async (req, res, next) => {
 
     res.cookie("user", token, {
       httpOnly: true,
-      secure: false,
-      sameSite: "lax",
+      secure: process.env.NODE_ENV === "production",
+      sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
       maxAge: 3600000,
     });
 
@@ -84,8 +83,8 @@ module.exports.logout = async (req, res, next) => {
   try {
     res.clearCookie("user", {
       httpOnly: true,
-      secure: false,
-      sameSite: "lax",
+      secure: process.env.NODE_ENV === "production",
+      sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
       maxAge: 3600000,
     });
 

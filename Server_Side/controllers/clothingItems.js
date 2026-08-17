@@ -5,6 +5,6 @@ module.exports.getClothingItems = async (req, res, next) => {
     const dataBaseItems = await clothingItem.find({});
     return res.status(200).json({ items: dataBaseItems });
   } catch (error) {
-    return next(err);
+    return next(error);
   }
 };

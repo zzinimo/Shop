@@ -3,17 +3,25 @@ const app = express();
 const mongoose = require("mongoose");
 const cors = require("cors");
 const cookieParser = require("cookie-parser");
+const helmet = require("helmet");
+const rateLimit = require("express-rate-limit");
+require("dotenv").config();
 const clothingRouter = require("./routes/clothingItemRouter");
 const ordersRouter = require("./routes/ordersRouter");
 const userRouter = require("./routes/userRouter");
 const subscribersRouter = require("./routes/subscribersRouter");
 const { errorHandler } = require("./middleware/errors");
 
-const { PORT = 3000 } = process.env;
+const {
+  PORT = 3000,
+  MONGODB_URI = "mongodb://localhost:27017/ECOMMERCE",
+  FRONTEND_URL = "http://localhost:5173",
+  NODE_ENV = "development",
+} = process.env;
 
 async function connectDB() {
   try {
-    await mongoose.connect("mongodb://localhost:27017/ECOMMERCE");
+    await mongoose.connect(MONGODB_URI);
     console.log("Successfully connected!");
   } catch (err) {
     console.error(err);
@@ -23,9 +31,18 @@ async function connectDB() {
 connectDB();
 app.use(express.static("public"));
 app.use(cookieParser());
+app.use(helmet());
+app.use(
+  rateLimit({
+    windowMs: 15 * 60 * 1000,
+    limit: 100,
+    standardHeaders: "draft-8",
+    legacyHeaders: false,
+  }),
+);
 app.use(
   cors({
-    origin: "http://localhost:5173",
+    origin: FRONTEND_URL,
     credentials: true,
   }),
 );

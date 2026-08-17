@@ -2,10 +2,11 @@ import "./AllProducts.css";
 import { useClothingItems } from "../../useClothingItems.js";
 import type { ClothingItem } from "../Products/Products.js";
 import AddToCartButton from "../AddToCartButton/AddToCartButton.js";
+import { apiBaseUrl } from "../../config.ts";
 
 
 function AllProducts() {
-  const publicUrl = 'http://localhost:3000'
+  const publicUrl = apiBaseUrl;
   const clothingItems: ClothingItem[] = useClothingItems(); 
 
   return (
