@@ -19,16 +19,24 @@ const {
   NODE_ENV = "development",
 } = process.env;
 
+app.set("trust proxy", 1);
+
+const normalizeOrigin = (value) => value.replace(/^['"]|['"]$/g, "").trim();
+
+const allowedOrigins = new Set(
+  [FRONTEND_URL, process.env.FRONTEND_URLS || ""]
+    .join(",")
+    .split(",")
+    .map((origin) => origin.trim())
+    .filter(Boolean)
+    .map(normalizeOrigin),
+);
+
 async function connectDB() {
-  try {
-    await mongoose.connect(MONGODB_URI);
-    console.log("Successfully connected!");
-  } catch (err) {
-    console.error(err);
-  }
+  await mongoose.connect(MONGODB_URI);
+  console.log("Successfully connected!");
 }
 
-connectDB();
 app.use(express.static("public"));
 app.use(cookieParser());
 app.use(helmet());
@@ -42,7 +50,13 @@ app.use(
 );
 app.use(
   cors({
-    origin: FRONTEND_URL,
+    origin(origin, callback) {
+      if (!origin || allowedOrigins.has(origin)) {
+        callback(null, true);
+        return;
+      }
+      callback(new Error(`CORS blocked for origin: ${origin}`));
+    },
     credentials: true,
   }),
 );
@@ -53,6 +67,19 @@ app.use("/orders", ordersRouter);
 app.use("/subscribe", subscribersRouter);
 app.use(errorHandler);
 
-app.listen(PORT, () => {
-  console.log(`App listening to port ${PORT}`);
-});
+async function startServer() {
+  try {
+    await connectDB();
+    app.listen(PORT, () => {
+      console.log(`App listening to port ${PORT}`);
+    });
+  } catch (err) {
+    console.error(
+      "Unable to start server because the database connection failed",
+      err,
+    );
+    process.exitCode = 1;
+  }
+}
+
+startServer();
