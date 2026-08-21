@@ -20,6 +20,12 @@ function Checkout() {
     shippingAddress: {
       address: "",
     },
+    payment: {
+      nameOnCard: "",
+      cardNumber: "",
+      expirationDate: "",
+      securityCode: "",
+    },
     items: [],
   });
 
@@ -34,6 +40,12 @@ function Checkout() {
     shippingAddress: {
       address: "",
     },
+    payment: {
+      nameOnCard: "",
+      cardNumber: "",
+      expirationDate: "",
+      securityCode: "",
+    },
     items: [],
   };
 
@@ -42,12 +54,21 @@ function Checkout() {
   const handleInputChange = (e) => {
     const { name, value, dataset } = e.target;
     const section = dataset.section;
+    let nextValue = value;
+
+    if (section === "payment" && name === "expirationDate") {
+      nextValue = value.replace(/\D/g, "").slice(0, 4);
+    }
+
+    if (section === "payment" && name === "securityCode") {
+      nextValue = value.replace(/\D/g, "").slice(0, 3);
+    }
 
     setUserInput((prev) => ({
       ...prev,
       [section]: {
         ...prev[section],
-        [name]: value,
+        [name]: nextValue,
       },
     }));
   };
@@ -180,6 +201,64 @@ function Checkout() {
             />
           </label>
         ) : null}
+
+        <section id="payment__Form">
+          <h2 className="payment__form_title">Payment Information</h2>
+          <label htmlFor="nameOnCard">
+            <input
+              type="text"
+              id="nameOnCard"
+              name="nameOnCard"
+              value={userInput.payment.nameOnCard ?? ""}
+              placeholder="Name on Card"
+              className="payment__form_input"
+              data-section="payment"
+              onChange={handleInputChange}
+            />
+          </label>
+          <label htmlFor="cardNumber">
+            <input
+              type="text"
+              id="cardNumber"
+              name="cardNumber"
+              value={userInput.payment.cardNumber ?? ""}
+              placeholder="Card Number"
+              className="payment__form_input"
+              data-section="payment"
+              onChange={handleInputChange}
+            />
+          </label>
+          <label htmlFor="expirationDate">
+            <input
+              type="text"
+              id="expirationDate"
+              name="expirationDate"
+              value={userInput.payment.expirationDate ?? ""}
+              placeholder="MMYY"
+              className="payment__form_input"
+              data-section="payment"
+              inputMode="numeric"
+              pattern="[0-9]{4}"
+              maxLength={4}
+              onChange={handleInputChange}
+            />
+          </label>
+          <label htmlFor="securityCode">
+            <input
+              type="text"
+              id="securityCode"
+              name="securityCode"
+              value={userInput.payment.securityCode ?? ""}
+              placeholder="CVV"
+              className="payment__form_input"
+              data-section="payment"
+              inputMode="numeric"
+              pattern="[0-9]{3}"
+              maxLength={3}
+              onChange={handleInputChange}
+            />
+          </label>
+        </section>
         <button type="submit" className="checkoutForm__submit_btn">
           Submit Order
         </button>
