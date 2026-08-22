@@ -15,7 +15,7 @@
 
 .slide__background_img_container {
   position: relative;
-  max-width: 768px;
+  max-width: 1200px;
   height: auto;
   overflow: hidden;
 }
@@ -33,13 +33,14 @@
   background: white;
   border: 1px solid black;
   padding: 2px;
-  border-radius: 2px;
+  border-radius: 8px;
   border: none;
-  font-size: 10px;
+  font-size: 25px;
+  font-weight: 500;
   cursor: pointer;
-  width: 75px;
+  width: 200px;
+  height: 75px;
   padding: 5px;
-  border-radius: 5px;
 }
 
 .slide__background_previous {

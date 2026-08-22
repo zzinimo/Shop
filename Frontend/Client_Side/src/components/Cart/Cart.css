@@ -4,7 +4,7 @@
   top: 0;
   background-color: white;
   z-index: 1000;
-  max-width: 300px;
+  max-width: 500px;
   width: 100%;
   max-height: 420px;
   overflow-y: auto;
@@ -25,10 +25,12 @@
 
 .cart__container_title {
   margin: 10px;
+  font-family: "chelseaMarket", sans-serif;
 }
 
 .cart__container_description {
   margin: 10px;
+  font-family: "chelseaMarket", sans-serif;
 }
 
 .list__item_container {
@@ -46,22 +48,30 @@
 }
 
 .cart__container_list_item_img {
-  width: 50px;
-  height: 50px;
+  width: 100px;
+  height: 100px;
+}
+
+.cart__container_list_item_price {
+  font-size: 22px;
+  font-family: "chelseaMarket", sans-serif;
 }
 
 .cart__container_total {
   margin: 10px;
+  font-family: "chelseaMarket", sans-serif;
 }
 
 .cart__container_checkout_button {
   display: block;
   width: 80%;
+  height: 40px;
   margin: 0 auto 10px;
-  height: 30px;
   border-radius: 5px;
   border: none;
   background: rgb(249, 99, 44);
+  font-size: 16px;
+  font-family: "chelseaMarket", sans-serif;
 }
 
 .cart__empty_container {
@@ -91,4 +101,9 @@
 
 .cart__container_delete_button {
   border: none;
+}
+
+.cart__container_delete_button_img {
+  width: 20px;
+  height: 20px;
 }

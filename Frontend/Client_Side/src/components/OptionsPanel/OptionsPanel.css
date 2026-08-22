@@ -18,6 +18,8 @@
 
 .optionsPanel__title {
   color: red;
+  font-size: 36px;
+  margin-left: 10px;
 }
 
 .container {
@@ -30,9 +32,13 @@
   right: 20px;
   border: none;
 }
+
+.container__close_button:hover {
+  cursor: pointer;
+}
 .container__close_button_img {
-  width: 20px;
-  height: 20px;
+  width: 40px;
+  height: 40px;
 }
 
 .container__links {
@@ -50,12 +56,16 @@
   text-decoration: none;
   color: black;
   font-weight: 600;
-  font-size: 20px;
-  margin-top: 15px;
+  font-size: 36px;
+  margin: 15px 0 0 10px;
 }
 
 .container__link_forward_arrow {
-  width: 20px;
+  width: 30px;
   margin: 10px 15px 0 0;
   margin-right: 15px;
+}
+
+.container__link_forward_arrow:hover {
+  cursor: pointer;
 }

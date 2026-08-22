@@ -71,9 +71,10 @@ function Products() {
                   />
                 </div>
                 
-                <h6 className="product__title">Clothing</h6>
-                <p className="product__price">{item.price}</p>
+                {/* <h6 className="product__title">Clothing</h6> */}
+                
                 <p className="product__description">{item.description}</p>
+                <p className="product__price">{item.price}</p>
               </li>
             );
           })}

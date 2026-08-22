@@ -1,4 +1,25 @@
 .add__button {
   position: absolute;
-  right: 5px;
+  right: 10px;
+  width: 150px;
+  /* height: 100px; */
+  height: 25px;
+  z-index: 1000;
+  border-radius: 8px;
+  border: none;
+  font-size: 16px;
+  background-color: rgb(241, 148, 0);
+  font-family: "chelseaMarket", sans-serif;
+  transition:
+    opacity 0.2s ease-in-out,
+    transform 0.2s ease-in-out;
+}
+
+.add__button:hover {
+  cursor: pointer;
+}
+
+.add__button:active {
+  opacity: 0.5;
+  transform: scale(80%);
 }

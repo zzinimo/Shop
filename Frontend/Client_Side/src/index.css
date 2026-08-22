@@ -8,5 +8,11 @@
   --main-bg: rgb(214, 17, 17);
 }
 
+@font-face {
+  font-family: "chelseaMarket";
+  src: url("./assets/fonts/ChelseaMarket-Regular.ttf") format("truetype");
+  font-weight: normal;
+  font-style: normal;
+}
 /* make a media query for min-width 600 (tablet)
 and min-width 900 px for desktop */

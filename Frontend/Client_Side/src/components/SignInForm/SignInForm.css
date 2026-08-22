@@ -15,7 +15,7 @@
   position: relative;
   z-index: 3001;
   background: white;
-  max-width: 350px;
+  max-width: 600px;
   width: 100%;
   display: flex;
   flex-direction: column;
@@ -25,6 +25,7 @@
 
 .customerForm__title {
   margin: 0 0 10px 0;
+  font-size: 36px;
 }
 
 .customerForm__close_btn {
@@ -36,8 +37,8 @@
 }
 
 .customerForm_close_btn_img {
-  width: 20px;
-  height: 20px;
+  width: 30px;
+  height: 30px;
 }
 
 .customerForm__content {
@@ -51,8 +52,9 @@
   display: flex;
   flex-direction: column;
   width: 100%;
-  max-width: 320px;
+  max-width: 500px;
   margin: 2px 0;
+  font-size: 24px;
 }
 .customerForm__input {
   display: block;
@@ -60,7 +62,7 @@
   box-sizing: border-box;
   border: 1px solid rgb(150, 148, 148);
   border-radius: 4px;
-  height: 25px;
+  height: 35px;
   padding-left: 10px;
 }
 
@@ -70,24 +72,29 @@
   border: none;
 }
 
+.customerForm__input::placeholder {
+  font-size: 16px;
+}
+
 .customerForm__submit_btn {
   max-width: 200px;
   width: 100%;
   margin: 15px auto 0;
   background-color: rgb(249, 99, 44);
   border: none;
-  height: 30px;
+  height: 40px;
   border-radius: 4px;
+  font-size: 22px;
 }
 
 .customerForm__signIn_text {
-  font-size: 12px;
+  font-size: 16px;
   margin: 5px auto 0;
 }
 
 .customerForm__signup_btn {
   border: none;
-  font-size: 12px;
+  font-size: 16px;
   margin-left: 5px;
   color: rgb(249, 99, 44);
   font-weight: 500;
