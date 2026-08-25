@@ -84,6 +84,10 @@
   border-radius: 5px;
   border: none;
   background: white;
+  color: black;
+  -webkit-text-fill-color: black;
+  font-size: 14px;
+  font-weight: 600;
   margin: 0 auto;
   display: block;
   margin-bottom: 20px;
@@ -93,6 +97,7 @@
 .checkoutForm__submit_btn--submitted {
   background-color: rgb(26, 164, 104);
   color: white;
+  -webkit-text-fill-color: white;
 }
 
 .checkoutForm__error_message {
