@@ -5,10 +5,11 @@ const orderSchema = new mongoose.Schema(
   {
     guestEmail: {
       type: String,
+      required: false,
       lowercase: true,
       validate: {
         validator: function (value) {
-          return validator.isEmail(value);
+          return value == null || validator.isEmail(value);
         },
         message: "please provide a valid email address",
       },
@@ -35,12 +36,12 @@ const orderSchema = new mongoose.Schema(
 
       email: {
         type: String,
-        required: true,
+        required: false,
         lowercase: true,
         trim: true,
         validate: {
           validator: function (value) {
-            return validator.isEmail(value);
+            return value == null || validator.isEmail(value);
           },
           message: "Please provide a valid email address",
         },

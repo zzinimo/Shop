@@ -6,12 +6,13 @@
   flex-direction: column;
   align-items: stretch;
   background: rgb(249, 99, 44);
-  max-width: 400px;
+  max-width: 700px;
+
   border-radius: 8px;
 }
 
 .checkout__form_title {
-  font-size: 22px;
+  font-size: 32px;
 }
 
 .checkout__form_input {
@@ -20,12 +21,13 @@
   margin: 0 auto;
   border-radius: 5px;
   border: none;
-  height: 25px;
+  height: 30px;
   padding-left: 10px;
+  font-size: 18px;
 }
 
 .checkout__form_input::placeholder {
-  font-size: 14px;
+  font-size: 18px;
 }
 
 .checkout__form_input:focus {
@@ -85,4 +87,17 @@
   margin: 0 auto;
   display: block;
   margin-bottom: 20px;
+  transition: background-color 0.2s ease-in-out;
+}
+
+.checkoutForm__submit_btn--submitted {
+  background-color: rgb(26, 164, 104);
+  color: white;
+}
+
+.checkoutForm__error_message {
+  color: white;
+  font-weight: 600;
+  text-align: center;
+  margin: 0;
 }

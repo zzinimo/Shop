@@ -1,11 +1,14 @@
 import "./Checkout.css";
-import { useState, useContext } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import { cartContext } from "../../context.js";
 import { createOrder } from "../../api.jsx";
 
 function Checkout() {
   const context = useContext(cartContext);
   const { cart = [] } = context || {};
+  const [orderSubmitted, setOrderSubmitted] = useState(false);
+  const [submitError, setSubmitError] = useState("");
+  const submitTimeoutRef = useRef(null);
 
   const [shippingAddress, setShippingAddress] = useState(true);
 
@@ -84,6 +87,20 @@ function Checkout() {
 
   const handleSubmitOrder = async (e) => {
     e.preventDefault();
+    if (!userInput.customer.email || !userInput.shippingAddress.address) {
+      setSubmitError(
+        "Please complete email and shipping address before submitting.",
+      );
+      return;
+    }
+
+    if (cart.length === 0) {
+      setSubmitError("Your cart is empty.");
+      return;
+    }
+
+    setSubmitError("");
+
     const itemsToOrder = cart.map((cartItem) => ({
       quantity: Number(cartItem.quantity ?? 1),
       price: Number(
@@ -97,14 +114,32 @@ function Checkout() {
     try {
       await createOrder({
         customer: userInput.customer,
+        guestEmail: userInput.customer.email,
         shippingAddress: userInput.shippingAddress,
         items: itemsToOrder,
       });
       setUserInput(initialPersonalInformationInput);
+      setOrderSubmitted(true);
+      if (submitTimeoutRef.current) {
+        window.clearTimeout(submitTimeoutRef.current);
+      }
+      submitTimeoutRef.current = window.setTimeout(() => {
+        setOrderSubmitted(false);
+      }, 1000);
     } catch (err) {
+      setOrderSubmitted(false);
+      setSubmitError(err.message || "Could not submit order.");
       console.error("Error creating order:", err);
     }
   };
+
+  useEffect(() => {
+    return () => {
+      if (submitTimeoutRef.current) {
+        window.clearTimeout(submitTimeoutRef.current);
+      }
+    };
+  }, []);
 
   //used for console.log statement when testing handleInputChange function line 25;
   // useEffect(() => {}, [userInput]);
@@ -259,9 +294,15 @@ function Checkout() {
             />
           </label>
         </section>
-        <button type="submit" className="checkoutForm__submit_btn">
-          Submit Order
+        <button
+          type="submit"
+          className={`checkoutForm__submit_btn ${orderSubmitted ? "checkoutForm__submit_btn--submitted" : ""}`}
+        >
+          {orderSubmitted ? "Order Submitted" : "Submit Order"}
         </button>
+        {submitError ? (
+          <p className="checkoutForm__error_message">{submitError}</p>
+        ) : null}
       </form>
     </>
   );

@@ -18,7 +18,10 @@ const checkResponse = async (
   }
 
   if (!response.ok) {
-    throw new Error(data?.message || fallbackMessage);
+    const details = Array.isArray(data?.errors)
+      ? `: ${data.errors.join(", ")}`
+      : "";
+    throw new Error(`${data?.message || fallbackMessage}${details}`);
   }
 
   return data;
