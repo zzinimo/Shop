@@ -2,6 +2,11 @@
 
 Full-stack clothing store built with React, Vite, Express, MongoDB, and Mongoose.
 
+## Live Demo
+
+- Frontend (Vercel): https://shop-seven-lyart.vercel.app/
+- Backend API base (Railway): https://shop-production-64fa.up.railway.app
+
 ## Features
 
 - Product browsing and product detail modal
@@ -39,6 +44,19 @@ The active application lives in `Frontend/Client_Side`, with the API in `Server_
 5. Copy `Frontend/Client_Side/.env.example` to `Frontend/Client_Side/.env`.
 6. Start the API with `npm start` from `Server_Side`.
 7. Start the frontend with `npm run dev` from `Frontend/Client_Side`.
+
+## Deployment
+
+- Frontend is deployed on Vercel.
+- Backend is deployed on Railway.
+- Vercel environment variable `VITE_API_URL` should point to your Railway backend URL.
+- Railway should define these environment variables:
+  - `PORT`
+  - `NODE_ENV=production`
+  - `MONGODB_URI`
+  - `FRONTEND_URL=https://shop-seven-lyart.vercel.app`
+  - `JWT_SECRET`
+  - `GUEST_ORDER_SECRET`
 
 ## API Overview
 
