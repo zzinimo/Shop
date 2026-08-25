@@ -1,8 +1,14 @@
+.all__products_header {
+  font-family: "chelseaMarket", sans-serif;
+  font-size: 36px;
+  margin: 0 0 10px 30px;
+}
 .all__products {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(100px, 400px));
   gap: 10px;
   justify-content: center;
+  margin-bottom: 30px;
 }
 
 .all__products_product {

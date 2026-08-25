@@ -23,3 +23,7 @@
   opacity: 0.5;
   transform: scale(80%);
 }
+
+.add__button--added {
+  background-color: rgb(26, 164, 104);
+}
