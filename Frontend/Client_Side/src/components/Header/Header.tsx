@@ -1,5 +1,5 @@
 import "./Header.css";
-import { useContext, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import { cartContext, loggedInContext } from "../../context.js";
 import sideThumbnail from "../../assets/menu.png";
 import OptionsPanel from "../OptionsPanel/OptionsPanel.jsx";
@@ -16,6 +16,8 @@ type HeaderProps = {
 
 function Header({ isPanelOpen, setIsPanelOpen }: HeaderProps) {
  const [openModal, setOpenModal] = useState<"sign-in" | "sign-up" | null>(null); 
+ const [justSignedOut, setJustSignedOut] = useState(false);
+ const signedOutTimeoutRef = useRef<number | null>(null);
 
 
   const cartCtx = useContext(cartContext); 
@@ -42,6 +44,9 @@ function Header({ isPanelOpen, setIsPanelOpen }: HeaderProps) {
   };
 
   const handleLoginClick = () => {
+      if (justSignedOut) {
+        return;
+      }
     setOpenModal("sign-in");
   }
 
@@ -49,10 +54,25 @@ function Header({ isPanelOpen, setIsPanelOpen }: HeaderProps) {
   try{
     await logoutUser(); 
     setIsLoggedIn(false); 
-  } catch(e){
+      setJustSignedOut(true);
+      if (signedOutTimeoutRef.current) {
+        window.clearTimeout(signedOutTimeoutRef.current);
+      }
+      signedOutTimeoutRef.current = window.setTimeout(() => {
+        setJustSignedOut(false);
+      }, 1000);
+    } catch{
     throw new Error("Unexpected error logging out")
   }
  }
+
+   useEffect(() => {
+    return () => {
+      if (signedOutTimeoutRef.current) {
+        window.clearTimeout(signedOutTimeoutRef.current);
+      }
+    };
+   }, []);
 
   return (
     <>
@@ -65,12 +85,10 @@ function Header({ isPanelOpen, setIsPanelOpen }: HeaderProps) {
         <div className="header__nav_bar_button_container">
           <button 
           type="button" 
-          className="header__signIn_btn" 
+          className={`header__signIn_btn ${justSignedOut ? "header__signIn_btn--signed_out" : ""}`}
+          disabled={justSignedOut && !isLoggedIn}
           onClick={isLoggedIn ? handleLogoutClick : handleLoginClick}>
-            {isLoggedIn 
-            ? "Sign Out" 
-            : "Sign In"
-            }
+            {justSignedOut ? "Signed Out" : isLoggedIn ? "Sign Out" : "Sign In"}
             </button>
             <button className="header__cart_button" onClick={handleCartClick}>
               <p className="header__cart_button_counter">{cart.length}</p>

@@ -25,6 +25,16 @@
   height: 40px;
   margin-right: 10px;
   font-family: "chelseaMarket", sans-serif;
+  transition: background-color 0.2s ease-in-out;
+}
+
+.header__signIn_btn:hover {
+  cursor: pointer;
+}
+
+.header__signIn_btn--signed_out {
+  background-color: rgb(26, 164, 104);
+  font-size: 14px;
 }
 
 .header__cart_button {
