@@ -4,3 +4,7 @@
   inset: 0;
   z-index: 1000;
 }
+
+.cart__overlay {
+  z-index: 3000;
+}
