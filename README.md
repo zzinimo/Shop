@@ -74,4 +74,4 @@ Run server validation tests with `npm test` from `Server_Side`. Run the frontend
 
 ## Payment Status
 
-The checkout currently creates an order without collecting card details. A real payment provider should be integrated before accepting payments in production.
+The checkout currently creates an order without collecting card details. A real payment provider would be integrated before accepting payments in production.

@@ -12,6 +12,7 @@
 .header__nav_bar_title {
   font-size: 30px;
   font-family: "chelseaMarket", sans-serif;
+  cursor: pointer;
 }
 
 .header__signIn_btn {
@@ -93,7 +94,7 @@
   color: red;
 }
 
-@media (max-width: 480px) {
+@media (max-width: 420px) {
   .header__nav_bar {
     padding: 8px;
     align-items: flex-start;

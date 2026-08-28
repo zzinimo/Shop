@@ -89,3 +89,9 @@
 .products__container_button:hover {
   cursor: pointer;
 }
+
+@media (max-width: 420px) {
+  .products {
+    grid-template-columns: repeat(auto-fit, minmax(100px, 350px));
+  }
+}

@@ -35,3 +35,9 @@
   width: 100%;
   height: 500px;
 }
+
+@media (max-width: 420px) {
+  .all__products {
+    grid-template-columns: repeat(auto-fit, minmax(100px, 350px));
+  }
+}

@@ -6,6 +6,7 @@ import OptionsPanel from "../OptionsPanel/OptionsPanel.jsx";
 import cartIcon from "../../assets/myCart.png"; 
 import SignInForm from "../SignInForm/SignInForm.jsx";
 import { logoutUser } from "../../api.jsx";
+import { useNavigate } from "react-router-dom";
 
 type HeaderProps = {
   isPanelOpen: boolean, 
@@ -15,6 +16,7 @@ type HeaderProps = {
 }
 
 function Header({ isPanelOpen, setIsPanelOpen }: HeaderProps) {
+  const navigate = useNavigate(); 
  const [openModal, setOpenModal] = useState<"sign-in" | "sign-up" | null>(null); 
  const [justSignedOut, setJustSignedOut] = useState(false);
  const signedOutTimeoutRef = useRef<number | null>(null);
@@ -66,6 +68,10 @@ function Header({ isPanelOpen, setIsPanelOpen }: HeaderProps) {
   }
  }
 
+ const handleHeaderClick = () => {
+  navigate("*")
+ }
+
    useEffect(() => {
     return () => {
       if (signedOutTimeoutRef.current) {
@@ -81,7 +87,7 @@ function Header({ isPanelOpen, setIsPanelOpen }: HeaderProps) {
   }
       <OptionsPanel isPanelOpen={isPanelOpen} setIsPanelOpen={setIsPanelOpen} />
       <nav className="header__nav_bar">
-        <h1 className="header__nav_bar_title">The Collection</h1>
+        <h1 className="header__nav_bar_title" onClick={handleHeaderClick}>The Collection</h1>
         <div className="header__nav_bar_button_container">
           <button 
           type="button" 

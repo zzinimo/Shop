@@ -4,8 +4,10 @@ import slide1 from "../../assets/MainBackgroundImage.jpeg";
 import slide2 from "../../assets/twoMen.jpeg";
 import slide3 from "../../assets/womanInJacket.jpeg";
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 function Slide() {
+  const navigate = useNavigate();
   const myImages = [slide1, slide2, slide3];
   const [currentIndex, setCurrentIndex] = useState(0);
   const [animationState, setAnimationState] = useState("slide-enter");
@@ -31,6 +33,10 @@ function Slide() {
     }, 300);
   };
 
+  const handleShopNowClick = () => {
+    return navigate("/all-products");
+  };
+
   return (
     <div className="slide__background_img_container">
       <div className={`slide ${animationState}`}>
@@ -39,7 +45,12 @@ function Slide() {
           alt=""
           className="slide__background_img"
         />
-        <button className="slide__background_button">Shop Now</button>
+        <button
+          className="slide__background_button"
+          onClick={handleShopNowClick}
+        >
+          Shop Now
+        </button>
       </div>
       <button
         className="slide__background_previous"

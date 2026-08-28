@@ -73,3 +73,12 @@
 .slide__background_next_img_type_next {
   transform: rotate(180deg);
 }
+
+@media (max-width: 420px) {
+  .slide__background_button {
+    width: 100px;
+    height: 50px;
+    font-size: 16px;
+    font-weight: 700;
+  }
+}
