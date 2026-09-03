@@ -24,10 +24,8 @@ const {
   getUserFromDb,
 } = require("../middleware/auth");
 
-// base url "/orders"
-
-router.get("/", checkToken, getUserFromDb, getOrder); //checked
-router.get("/:id", checkToken, getUserFromDb, getOrderById); //checked
+router.get("/", checkToken, getUserFromDb, getOrder);
+router.get("/:id", checkToken, getUserFromDb, getOrderById);
 
 router.post(
   "/",
@@ -44,7 +42,7 @@ router.patch(
   updateStatus,
 ); //checked
 
-router.patch("/:id/cancel", checkToken, getUserFromDb, cancelOrder); //checked
-router.delete("/:id", checkToken, getUserFromDb, deleteOrder); //checked
+router.patch("/:id/cancel", checkToken, getUserFromDb, cancelOrder);
+router.delete("/:id", checkToken, getUserFromDb, deleteOrder);
 
 module.exports = router;

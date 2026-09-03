@@ -14,7 +14,7 @@ export function useClothingItems(){
 					setClothingItems(items.items)
 				}
 			} catch(error){
-				console.error("Failed to fetch clothing items:", error)
+				console.error("Failed to fetch clothing items:", error);
 			}
 			
 		}

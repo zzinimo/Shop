@@ -41,7 +41,6 @@ function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   const handleOutsideCartClick = (e) => {
-    console.log("target", e.target);
     if (e.target === e.currentTarget) {
       setIsCartOpen(false);
     }

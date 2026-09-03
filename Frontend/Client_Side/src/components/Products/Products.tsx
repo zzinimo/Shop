@@ -33,12 +33,12 @@ function Products() {
     setIsOpen(true);
     setSelectedImage(`${import.meta.env.VITE_API_URL || "http://localhost:3000"}${item.src}`);
     setSelectedDescription(item.description);
-    setSelectedPrice(item.price); 
+    setSelectedPrice(item.price);
   };
 
 
     const handleViewProductButtonClick = () => {
-      navigate('/all-products'); 
+      navigate('/all-products');
     }
   return (
     <>

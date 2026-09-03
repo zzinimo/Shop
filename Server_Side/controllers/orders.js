@@ -15,8 +15,6 @@ const guestTokenSecretKey =
 
 // Create
 module.exports.createOrder = async (req, res, next) => {
-  const user = req.user;
-
   if (req.user) {
     try {
       const { customer, shippingAddress, items } = req.body;
@@ -27,25 +25,9 @@ module.exports.createOrder = async (req, res, next) => {
         });
       }
 
-      // if (!Array.isArray(items) || items.length === 0) {
-      //   return res.status(400).json({
-      //     message: "at least one item is required",
-      //   });
-      // }
-
       const subtotal = items.reduce((sum, item) => {
         const qty = Number(item.quantity);
         const price = Number(item.price);
-
-        // if (
-        //   !Number.isFinite(qty) ||
-        //   qty <= 0 ||
-        //   !Number.isFinite(price) ||
-        //   price <= 0
-        // ) {
-        //   throw new Error("INVALID_ITEM");
-        // }
-
         return sum + qty * price;
       }, 0);
 
