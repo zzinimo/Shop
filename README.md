@@ -1,3 +1,5 @@
+[![Watch the project demonstration](./Frontend/Client_Side/docs/demo-thumbnail.png)](https://www.loom.com/share/47c27b4b01b74cbaa627456964700c62)
+
 # E-Commerce Store
 
 Full-stack clothing store built with React, Vite, Express, MongoDB, and Mongoose.
