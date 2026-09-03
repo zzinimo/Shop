@@ -2,6 +2,8 @@
 
 [![Watch the project demonstration](./docs/demo-thumbnail.png)](https://www.loom.com/share/47c27b4b01b74cbaa627456964700c62)
 
+[Watch the full video on Loom](https://www.loom.com/share/47c27b4b01b74cbaa627456964700c62)
+
 # Frontend Client
 
 This is the canonical React/Vite client for the E-Commerce Store.
