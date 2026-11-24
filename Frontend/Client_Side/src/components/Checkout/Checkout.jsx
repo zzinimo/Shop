@@ -10,7 +10,7 @@ function Checkout() {
   const [submitError, setSubmitError] = useState("");
   const submitTimeoutRef = useRef(null);
 
-  const [shippingAddress, setShippingAddress] = useState(true);
+  const [isShippingSameAsBilling, setIsShippingSameAsBilling] = useState(true);
 
   //PERSONAL INFORMATION INPUT STATE
 
@@ -19,6 +19,9 @@ function Checkout() {
       firstName: "",
       lastName: "",
       email: "",
+    },
+    billingAddress: {
+      address: "",
     },
     shippingAddress: {
       address: "",
@@ -39,6 +42,9 @@ function Checkout() {
       firstName: "",
       lastName: "",
       email: "",
+    },
+    billingAddress: {
+      address: "",
     },
     shippingAddress: {
       address: "",
@@ -79,18 +85,26 @@ function Checkout() {
   // PAYMENT FORM RADIO CLICK HANDLER
 
   const handleRadioClick = (value) => {
-    setShippingAddress(value);
-    console.log("shipping address state", value);
+    setIsShippingSameAsBilling(value);
   };
 
   // SUBMIT FORM HANDLER THAT CREATES ORDER AND CLEARS INPUTS
 
   const handleSubmitOrder = async (e) => {
     e.preventDefault();
-    if (!userInput.customer.email || !userInput.shippingAddress.address) {
+    const addressToShip = isShippingSameAsBilling
+      ? userInput.billingAddress
+      : userInput.shippingAddress;
+
+    if (!userInput.customer.email || !userInput.billingAddress.address) {
       setSubmitError(
-        "Please complete email and shipping address before submitting.",
+        "Please complete email and billing address before submitting.",
       );
+      return;
+    }
+
+    if (!addressToShip.address) {
+      setSubmitError("Please enter a shipping address before submitting.");
       return;
     }
 
@@ -115,7 +129,7 @@ function Checkout() {
       await createOrder({
         customer: userInput.customer,
         guestEmail: userInput.customer.email,
-        shippingAddress: userInput.shippingAddress,
+        shippingAddress: addressToShip,
         items: itemsToOrder,
       });
       setUserInput(initialPersonalInformationInput);
@@ -189,10 +203,10 @@ function Checkout() {
             type="text"
             id="address"
             name="address"
-            value={userInput.shippingAddress.address ?? ""}
-            placeholder="Enter Address"
+            value={userInput.billingAddress.address ?? ""}
+            placeholder="Enter Billing Address"
             className="checkout__form_input"
-            data-section="shippingAddress"
+            data-section="billingAddress"
             onChange={handleInputChange}
           />
         </label>
@@ -207,7 +221,8 @@ function Checkout() {
             name="billing-address"
             value="yes"
             className="checkout__form_radio_btn"
-            onClick={() => handleRadioClick(true)}
+            checked={isShippingSameAsBilling}
+            onChange={() => handleRadioClick(true)}
           />
           <label htmlFor="yes" className="checkout__form_radio_btn_label">
             Yes
@@ -220,19 +235,25 @@ function Checkout() {
             name="billing-address"
             value="no"
             className="checkout__form_radio_btn"
-            onClick={() => handleRadioClick(false)}
+            checked={!isShippingSameAsBilling}
+            onChange={() => handleRadioClick(false)}
           />
           <label htmlFor="no" className="checkout__form_radio_btn_label">
             No
           </label>
         </div>
 
-        {shippingAddress === false ? (
-          <label htmlFor="">
+        {!isShippingSameAsBilling ? (
+          <label htmlFor="shippingAddress">
             <input
               type="text"
+              id="shippingAddress"
+              name="address"
+              value={userInput.shippingAddress.address ?? ""}
               placeholder="Enter Shipping Address"
               className="checkout__form_input"
+              data-section="shippingAddress"
+              onChange={handleInputChange}
             />
           </label>
         ) : null}
