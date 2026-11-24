@@ -31,7 +31,7 @@ function App() {
         return JSON.parse(cartData);
       }
     } catch {
-      console.error("Failed to parse JSON. Using fallback data istead");
+      console.error("Failed to parse JSON. Using fallback data instead");
       return [];
     }
   });
