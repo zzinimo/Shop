@@ -1,5 +1,6 @@
 const mongoose = require("mongoose");
 const Order = require("../models/orders");
+const ClothingItem = require("../models/clothingItems");
 const jwt = require("jsonwebtoken");
 
 const allowedStatusNames = [
@@ -13,11 +14,72 @@ const allowedStatusNames = [
 const guestTokenSecretKey =
   process.env.GUEST_ORDER_SECRET || process.env.JWT_SECRET;
 
+// ---------------------------------------------------------------------------
+// Helpers
+// ---------------------------------------------------------------------------
+
+// Creates an error the central errorHandler turns into a 400 response.
+const badRequest = (message) => {
+  const err = new Error(message);
+  err.statusCode = 400;
+  return err;
+};
+
+// Prices are stored as strings like "$1,250.00", so strip formatting first.
+const parsePrice = (value) =>
+  Number(String(value).replace("$", "").replaceAll(",", ""));
+
+// Never trust a price sent by the browser: anyone can edit the request in
+// DevTools. Look every product up in the database and charge that price.
+const priceItemsFromDb = async (items) => {
+  const productIds = [...new Set(items.map((item) => String(item.productId)))];
+
+  if (!productIds.every((id) => mongoose.isValidObjectId(id))) {
+    throw badRequest("Invalid product id");
+  }
+
+  const products = await ClothingItem.find({ _id: { $in: productIds } });
+  const priceById = new Map(
+    products.map((product) => [
+      product._id.toString(),
+      parsePrice(product.price),
+    ]),
+  );
+
+  return items.map((item) => {
+    const price = priceById.get(String(item.productId));
+
+    if (price === undefined) {
+      throw badRequest(`Product ${item.productId} not found`);
+    }
+
+    if (!Number.isFinite(price) || price <= 0) {
+      throw badRequest(`Product ${item.productId} is not available`);
+    }
+
+    return { ...item, price };
+  });
+};
+
+const calculateTotals = (items) => {
+  const subtotalInCents = items.reduce(
+    (sum, item) => sum + Math.round(item.price * 100) * item.quantity,
+    0,
+  );
+  const subtotal = subtotalInCents / 100;
+  const shipping = 0;
+  return { subtotal, shipping, total: subtotal + shipping };
+};
+
+// Guest orders have no userId, so check it exists before comparing.
+const isOrderOwner = (order, user) =>
+  order.userId != null && order.userId.toString() === user._id.toString();
+
 // Create
 module.exports.createOrder = async (req, res, next) => {
   if (req.user) {
     try {
-      const { customer, shippingAddress, items } = req.body;
+      const { customer, shippingAddress } = req.body;
 
       if (!customer || !shippingAddress) {
         return res.status(400).json({
@@ -25,25 +87,14 @@ module.exports.createOrder = async (req, res, next) => {
         });
       }
 
-      const subtotal = items.reduce((sum, item) => {
-        const qty = Number(item.quantity);
-        const price = Number(item.price);
-        return sum + qty * price;
-      }, 0);
-
-      const shipping = 0;
-      const total = subtotal + shipping;
+      const items = await priceItemsFromDb(req.body.items);
 
       const newOrder = await Order.create({
         userId: new mongoose.Types.ObjectId(req.user.id),
         customer,
         shippingAddress,
         items,
-        totals: {
-          subtotal,
-          shipping,
-          total,
-        },
+        totals: calculateTotals(items),
         status: "pending",
       });
 
@@ -52,13 +103,6 @@ module.exports.createOrder = async (req, res, next) => {
         order: newOrder,
       });
     } catch (err) {
-      if (err.message === "INVALID_ITEM") {
-        return res.status(400).json({
-          message:
-            "quantity must be greater than 0 and price must be greater than 0",
-        });
-      }
-
       if (err.name === "ValidationError") {
         return res.status(400).json({
           message: "Invalid order data",
@@ -73,41 +117,27 @@ module.exports.createOrder = async (req, res, next) => {
     //GUEST ORDER LOGIC
     // ----------------------------------------------------------------------
     try {
-      const { guestEmail, items, shippingAddress } = req.body;
+      const { guestEmail, shippingAddress } = req.body;
 
-      if (!guestEmail || !items || !Array.isArray(items) || !shippingAddress) {
+      if (
+        !guestEmail ||
+        !Array.isArray(req.body.items) ||
+        req.body.items.length === 0 ||
+        !shippingAddress
+      ) {
         return res.status(400).json({
           message:
             "Email is required, shipping address is required and at least one item in cart.",
         });
       }
-      const subtotal = items.reduce((sum, item) => {
-        const qty = Number(item.quantity);
-        const price = Number(item.price);
 
-        if (
-          !Number.isFinite(qty) ||
-          qty <= 0 ||
-          !Number.isFinite(price) ||
-          price <= 0
-        ) {
-          throw new Error("INVALID_ITEM");
-        }
-        return sum + qty * price;
-      }, 0);
-
-      const shipping = 0;
-      const total = subtotal + shipping;
+      const items = await priceItemsFromDb(req.body.items);
 
       const newGuestOrder = await Order.create({
-        guestEmail: guestEmail,
+        guestEmail,
         shippingAddress,
-        items: items,
-        totals: {
-          subtotal: subtotal,
-          shipping,
-          total,
-        },
+        items,
+        totals: calculateTotals(items),
       });
 
       const token = await jwt.sign(
@@ -175,7 +205,7 @@ module.exports.getOrderById = async (req, res, next) => {
       return res.status(404).json({ message: "Order not found" });
     }
 
-    if (order.userId.toString() !== user._id.toString()) {
+    if (!isOrderOwner(order, user)) {
       return res
         .status(403)
         .json({ message: "Not authorized to view this order" });
@@ -187,13 +217,11 @@ module.exports.getOrderById = async (req, res, next) => {
   }
 };
 
-// Update
+// Update (admin only: the route runs requireAdmin first, so no owner check here)
 module.exports.updateStatus = async (req, res, next) => {
   try {
     const { id } = req.params;
     const { status } = req.body;
-
-    const user = req.currentUser;
 
     if (!mongoose.isValidObjectId(id)) {
       return res.status(400).json({ message: "Invalid order id" });
@@ -221,12 +249,6 @@ module.exports.updateStatus = async (req, res, next) => {
 
     if (!updatedOrder) {
       return res.status(404).json({ message: "Order not found" });
-    }
-
-    if (updatedOrder.userId.toString() !== user._id.toString()) {
-      return res
-        .status(403)
-        .json({ message: "Not authorized to update this order" });
     }
 
     return res.status(200).json({
@@ -263,7 +285,7 @@ module.exports.cancelOrder = async (req, res, next) => {
       return res.status(404).json({ message: "Order not found" });
     }
 
-    if (order.userId.toString() !== user._id.toString()) {
+    if (!isOrderOwner(order, user)) {
       return res
         .status(403)
         .json({ message: "Not authorized to cancel this order" });
@@ -300,20 +322,24 @@ module.exports.deleteOrder = async (req, res, next) => {
       return res.status(400).json({ message: "Invalid order id" });
     }
 
-    const deletedOrder = await Order.findByIdAndDelete(id);
-    if (!deletedOrder) {
+    // Check ownership BEFORE deleting. Deleting first and checking after
+    // would still return 403, but the order would already be gone.
+    const order = await Order.findById(id);
+    if (!order) {
       return res.status(404).json({ message: "Order not found" });
     }
 
-    if (deletedOrder.userId.toString() !== user._id.toString()) {
+    if (!isOrderOwner(order, user)) {
       return res
         .status(403)
         .json({ message: "You are not authorized to delete this order" });
     }
 
+    await order.deleteOne();
+
     return res.status(200).json({
       message: "Order deleted",
-      order: deletedOrder,
+      order,
     });
   } catch (err) {
     if (err.name === "CastError") {

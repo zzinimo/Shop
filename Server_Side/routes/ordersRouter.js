@@ -22,6 +22,7 @@ const {
   optionalAuth,
   checkToken,
   getUserFromDb,
+  requireAdmin,
 } = require("../middleware/auth");
 
 router.get("/", checkToken, getUserFromDb, getOrder);
@@ -38,6 +39,7 @@ router.patch(
   "/:id/status",
   checkToken,
   getUserFromDb,
+  requireAdmin,
   validateOrder(statusUpdateSchema),
   updateStatus,
 ); //checked

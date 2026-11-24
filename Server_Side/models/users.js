@@ -29,6 +29,13 @@ const userSchema = mongoose.Schema(
         message: "Please proved a valid email address",
       },
     },
+    // Only admins can move orders through paid/shipped/delivered.
+    // New users are always customers; promote someone by editing this field in MongoDB.
+    role: {
+      type: String,
+      enum: ["customer", "admin"],
+      default: "customer",
+    },
   },
   { timestamps: true },
 );

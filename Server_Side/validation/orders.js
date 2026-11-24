@@ -8,7 +8,9 @@ const baseOrder = {
     .items(
       Joi.object({
         quantity: Joi.number().integer().min(1).required(),
-        price: Joi.number().min(0).required(),
+        // Accepted for backwards compatibility but ignored: the server
+        // always charges the price stored in the database.
+        price: Joi.number().min(0),
         productId: Joi.string().required(),
         src: Joi.string().required().trim(),
         description: Joi.string().required().trim(),

@@ -50,6 +50,15 @@ module.exports.getUserFromDb = async (req, res, next) => {
   }
 };
 
+// Must run after getUserFromDb. The role is read from the database, not the JWT,
+// so demoting an admin takes effect immediately instead of when their token expires.
+module.exports.requireAdmin = (req, res, next) => {
+  if (req.currentUser?.role !== "admin") {
+    return res.status(403).json({ message: "Admin access required" });
+  }
+  return next();
+};
+
 //for guest checkouts
 module.exports.optionalAuth = async (req, res, next) => {
   try {
