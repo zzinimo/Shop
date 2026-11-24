@@ -21,3 +21,4 @@ MERN stack app: React frontend (/client), Express + Node API (/server), MongoDB 
 
 - Ask before adding new npm packages
 - Explain changes briefly. I'm preparing for junior dev interviews, so I want to understand the "why"
+- Dont just give me the code. Explain what I should do with clues and why.
